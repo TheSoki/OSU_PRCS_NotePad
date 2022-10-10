@@ -8,3 +8,8 @@ Notepad written in C# (.NET) and JavaScript (TypeScript, React) as a semester as
 
 - Have .NET Core 6.0 installed
 - Run project using `dotnet run` in `/backend` directory
+
+### Frontend
+
+- Have Node.js v16 and yarn installed
+- Run project using `yarn dev` in `/frontend` directory
