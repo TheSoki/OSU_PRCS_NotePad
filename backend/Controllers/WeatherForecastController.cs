@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-
+using databaseConnection;
 namespace backend.Controllers;
 
 [ApiController]
@@ -21,6 +21,9 @@ public class WeatherForecastController : ControllerBase
     [HttpGet(Name = "GetWeatherForecast")]
     public IEnumerable<WeatherForecast> Get()
     {
+        Connection Connection = new Connection();
+        Connection.Execute();
+
         return Enumerable.Range(1, 5).Select(index => new WeatherForecast
         {
             Date = DateTime.Now.AddDays(index),
