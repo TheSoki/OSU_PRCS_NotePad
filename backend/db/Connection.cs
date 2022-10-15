@@ -4,11 +4,12 @@ namespace databaseConnection
 {
     class Connection
     {
-        public static SqliteConnection connection = new SqliteConnection(new SqliteConnectionStringBuilder { DataSource = "./db/database.db" }.ToString());
+        private SqliteConnection connection = new SqliteConnection(new SqliteConnectionStringBuilder { DataSource = "./db/database.db" }.ToString());
 
         public Connection()
         {
             connection.Open();
+            SeedDb();
         }
 
         ~Connection()
@@ -16,22 +17,17 @@ namespace databaseConnection
             connection.Close();
         }
 
-        public static void Execute()
+        public void SeedDb()
         {
-            var selectCmd = connection.CreateCommand();
-            // selectCmd.CommandText = "CREATE TABLE Persons (ID int NOT NULL, Name varchar(255) NOT NULL);";
-            // selectCmd.CommandText += "INSERT INTO Persons (ID, Name) VALUES (1, 'John Doe');";
-            // selectCmd.CommandText += "INSERT INTO Persons (ID, Name) VALUES (2, 'Jane Doe');";
-            // selectCmd.ExecuteNonQuery();
+            var command = connection.CreateCommand();
+            command.CommandText = "CREATE TABLE IF NOT EXISTS user (id INTEGER PRIMARY KEY, username TEXT NOT NULL, password TEXT NOT NULL, email TEXT NOT NULL, role TEXT NOT NULL);";
+            command.CommandText += "CREATE TABLE IF NOT EXISTS note (id INTEGER PRIMARY KEY, title TEXT NOT NULL, content TEXT NOT NULL, user_id INTEGER NOT NULL, FOREIGN KEY (user_id) REFERENCES user(id));";
+            command.ExecuteNonQuery();
+        }
 
-            selectCmd.CommandText = "SELECT * FROM Persons";
-            using (var reader = selectCmd.ExecuteReader())
-            {
-                while (reader.Read())
-                {
-                    Console.WriteLine(reader.GetString(0) + " " + reader.GetString(1));
-                }
-            }
+        public SqliteConnection getConnection()
+        {
+            return connection;
         }
 
     }
