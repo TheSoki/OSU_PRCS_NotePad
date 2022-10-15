@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 namespace backend.Controllers;
-using databaseContext;
 
 [ApiController]
 [Route("api/[controller]")]
