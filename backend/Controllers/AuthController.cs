@@ -9,19 +9,6 @@ public class AuthController : ControllerBase
 {
     private UserContext userContext = new UserContext();
 
-    [Route("test")]
-    [HttpGet]
-    public ActionResult<Boolean> Post()
-    {
-        var token = Request.Cookies["token"];
-        if (token == null)
-        {
-            return false;
-        }
-
-        return Ok(AuthContext.IsTokenValid(token));
-    }
-
     [Route("login")]
     [HttpPost]
     public ActionResult<Token> Post([FromBody] Login request)
