@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 namespace backend.Controllers;
+using System.IdentityModel.Tokens.Jwt;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -8,9 +9,22 @@ public class AuthController : ControllerBase
 {
     private UserContext userContext = new UserContext();
 
+    [Route("test")]
+    [HttpGet]
+    public ActionResult<Boolean> Post()
+    {
+        var token = Request.Cookies["token"];
+        if (token == null)
+        {
+            return false;
+        }
+
+        return Ok(AuthContext.IsTokenValid(token));
+    }
+
     [Route("login")]
     [HttpPost]
-    public ActionResult<User> Post([FromBody] Login request)
+    public ActionResult<Token> Post([FromBody] Login request)
     {
         var user = userContext.GetUserByEmail(request.Email);
         if (user == null)
@@ -18,15 +32,24 @@ public class AuthController : ControllerBase
             return NotFound();
         }
 
-        var passwordBytes = System.Text.Encoding.UTF8.GetBytes(request.Password);
         var IsHashValid = AuthContext.IsHashValid(user.Password, request.Password);
 
-        if (!IsHashValid)
+        if (!AuthContext.IsHashValid(user.Password, request.Password))
         {
             return NotFound();
         }
 
-        return Ok(user);
+        var userToken = AuthContext.GenerateToken(user);
+        var token = new JwtSecurityTokenHandler().WriteToken(userToken);
+
+        var cookieOptions = new CookieOptions
+        {
+            HttpOnly = true,
+            Expires = userToken.ValidTo
+        };
+        Response.Cookies.Append("token", token, cookieOptions);
+
+        return Ok(token);
     }
 
     [Route("register")]
@@ -51,4 +74,6 @@ public class AuthController : ControllerBase
             return Ok();
         }
     }
+
+
 }
