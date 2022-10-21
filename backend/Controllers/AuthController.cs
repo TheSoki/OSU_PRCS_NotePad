@@ -32,7 +32,9 @@ public class AuthController : ControllerBase
         var cookieOptions = new CookieOptions
         {
             HttpOnly = true,
-            Expires = userToken.ValidTo
+            Expires = userToken.ValidTo,
+            SameSite = SameSiteMode.None,
+            Secure = true
         };
         Response.Cookies.Append("token", token, cookieOptions);
 
