@@ -23,6 +23,6 @@ app.UseAuthorization();
 app.MapControllers();
 
 builder.Services.AddCors();
-app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+app.UseCors(options => options.WithOrigins("http://localhost:3000").AllowAnyMethod().AllowAnyHeader().AllowCredentials());
 
 app.Run();
