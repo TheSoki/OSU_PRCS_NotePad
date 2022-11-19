@@ -36,5 +36,26 @@ namespace backend.Controllers
             }
         }
 
+        [Route("delete")]
+        [HttpDelete]
+        public ActionResult DeleteIssue(int id)
+        {
+            try
+            {
+                var issueToDelete = issueContext.GetIssueById(id);
+
+                if (issueToDelete == null)
+                {
+                    return NotFound($"Employee with Id = {id} not found");
+                }
+
+                issueContext.DeleteIssue(id);
+                return Ok();
+            }
+            catch (Exception)
+            {
+                return BadRequest("Error deleting data");
+            }
+        }
     }
 }

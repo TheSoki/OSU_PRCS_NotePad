@@ -69,5 +69,5 @@ public class IssueContext
         command.Parameters.AddWithValue("@id", id);
         command.CommandText = "DELETE FROM issues WHERE id = @id";
 
-;    }
+    }
 }
