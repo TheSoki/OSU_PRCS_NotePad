@@ -1,5 +1,5 @@
 ﻿using backend.model;
-
+/*
 public class IssueContext
     {
         private Connection connection = new Connection();
@@ -71,3 +71,4 @@ public class IssueContext
 
     }
 }
+*/
