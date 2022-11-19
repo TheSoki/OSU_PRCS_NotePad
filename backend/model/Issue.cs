@@ -4,9 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace backend.model
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class Issue : ControllerBase
+    public class Issue
     {
         [Required]
         public int Id { get; set; }
