@@ -29,6 +29,16 @@ namespace backend.Controllers
             return Ok(notes);
         }
 
+        [HttpGet("{id}")]
+        [ProducesResponseType(typeof(NotesDTO), 200)]
+        public IActionResult GetNoteById(int id)
+        {
+            var note = _noteRepository.GetNoteById(id);
+
+            if (note == null) { return NotFound(); }
+            return Ok(note);
+        }
+
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

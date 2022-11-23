@@ -23,6 +23,11 @@ namespace backend.Repository
             return _context.Notes.OrderBy(p => p.Id).ToList();
         }
 
+        public NotesDTO GetNoteById(int id)
+        {
+            return _context.Notes.Where(p => p.Id == id).FirstOrDefault();
+        }
+
         public bool deleteNoteById(int id)
         {
             var note = _context.Notes.Where(p => p.Id == id).FirstOrDefault();
