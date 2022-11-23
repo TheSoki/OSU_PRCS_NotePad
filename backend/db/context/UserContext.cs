@@ -1,4 +1,6 @@
+/*
 class UserContext
+
 {
     private Connection connection = new Connection();
 
@@ -56,3 +58,4 @@ class UserContext
         command.ExecuteNonQuery();
     }
 }
+*/

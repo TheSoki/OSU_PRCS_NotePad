@@ -7,7 +7,7 @@ using System.IdentityModel.Tokens.Jwt;
 
 public class AuthController : ControllerBase
 {
-    private UserContext userContext = new UserContext();
+   /* private UserContext userContext = new UserContext();
 
     [Route("login")]
     [HttpPost]
@@ -63,6 +63,6 @@ public class AuthController : ControllerBase
             return Ok();
         }
     }
-
+   */
 
 }

@@ -1,4 +1,5 @@
-﻿using backend.model;
+﻿/*
+using backend.model;
 
 public class IssueContext
     {
@@ -71,3 +72,4 @@ public class IssueContext
 
     }
 }
+*/

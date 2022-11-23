@@ -1,4 +1,5 @@
-using Microsoft.Data.Sqlite;
+/*
+ * using Microsoft.Data.Sqlite;
 
 class Connection
 {
@@ -29,3 +30,4 @@ class Connection
     }
 
 }
+*/
