@@ -1,5 +1,4 @@
-﻿using backend.Interface;
-using backend.model;
+﻿using backend.model;
 using backend.Repository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -11,39 +10,35 @@ namespace backend.Controllers
     [ApiController]
     public class NoteController : Controller
     {
-       // private IssueContext issueContext = new();
 
-        private readonly INotesInterface _notesInterface;
+        private readonly NotesRepository _noteRepository;
 
-            public NoteController(INotesInterface notesInterface)
+        public NoteController(NotesRepository noteRepository)
         {
-            _notesInterface = notesInterface;
+            _noteRepository = noteRepository;
         }
 
 
-        [Route("get")]
         [HttpGet]
-        [ProducesResponseType (typeof(NotesDTO), 200)]
+        [ProducesResponseType(typeof(NotesDTO[]), 200)]
         public IActionResult GetNotes()
         {
-            var notes = _notesInterface.GetNotes();
+            var notes = _noteRepository.GetNotes();
 
-           if(ModelState.IsValid) { BadRequest(ModelState); }
-           return Ok(notes);   
+            if (ModelState.IsValid) { BadRequest(ModelState); }
+            return Ok(notes);
         }
 
-        
-        [Route("create")]
         [HttpPost]
-        [ProducesResponseType(204)]
-        [ProducesResponseType(400)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult CreateNote([FromBody] NotesDTO noteCreate)
         {
-          if(noteCreate == null) { return BadRequest(ModelState); }
-          
-          var note = _notesInterface.GetNotes()
-                .Where(c => c.Title.Trim().ToUpper() == noteCreate.Title.TrimEnd().ToUpper())
-                .FirstOrDefault();  
+            if (noteCreate == null) { return BadRequest(ModelState); }
+
+            var note = _noteRepository.GetNotes()
+                  .Where(c => c.Title.Trim().ToUpper() == noteCreate.Title.TrimEnd().ToUpper())
+                  .FirstOrDefault();
 
             if (note != null)
             {
@@ -55,27 +50,26 @@ namespace backend.Controllers
 
             return Ok();
         }
-        /*
-        [Route("delete")]
-        [HttpDelete]
+
+        [HttpDelete("{id}")]
         public ActionResult DeleteIssue(int id)
         {
             try
             {
-                var issueToDelete = issueContext.GetIssueById(id);
+                var issueToDelete = _noteRepository.GetNoteById(id);
 
                 if (issueToDelete == null)
                 {
                     return NotFound($"Employee with Id = {id} not found");
                 }
 
-                issueContext.DeleteIssue(id);
+                _noteRepository.deleteNoteById(id);
                 return Ok();
             }
             catch (Exception)
             {
                 return BadRequest("Error deleting data");
             }
-        }*/
+        }
     }
 }
