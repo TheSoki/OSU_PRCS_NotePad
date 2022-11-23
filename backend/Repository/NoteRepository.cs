@@ -9,7 +9,6 @@ namespace backend.Repository
         public NoteRepository(DataContext context)
         {
             _context = context;
-
         }
 
         public bool CreateNote(NoteDTO note)
@@ -20,17 +19,17 @@ namespace backend.Repository
 
         public ICollection<NoteDTO> GetNotes()
         {
-            return _context.Notes.OrderBy(p => p.Id).ToList();
+            return _context.Note.OrderBy(p => p.Id).ToList();
         }
 
         public NoteDTO GetNoteById(int id)
         {
-            return _context.Notes.Where(p => p.Id == id).FirstOrDefault();
+            return _context.Note.Where(p => p.Id == id).FirstOrDefault();
         }
 
         public bool deleteNoteById(int id)
         {
-            var note = _context.Notes.Where(p => p.Id == id).FirstOrDefault();
+            var note = _context.Note.Where(p => p.Id == id).FirstOrDefault();
             _context.Remove(note);
             return Save();
         }

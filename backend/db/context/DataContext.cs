@@ -1,6 +1,5 @@
 ﻿
 using backend.model;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace backend.db.context
@@ -13,16 +12,14 @@ namespace backend.db.context
         {
             Configuration = configuration;
         }
+
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
-            // connect to sqlite database
             options.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
         }
 
-        public DbSet<User> Users { get; set; }
-        public DbSet<NoteDTO> Notes { get; set; }
-        public DbSet<Login> Logins { get; set; }
-        public DbSet<Token> Tokens { get; set; }
+        public DbSet<User> User { get; set; }
+        public DbSet<NoteDTO> Note { get; set; }
 
     }
 }

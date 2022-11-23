@@ -10,7 +10,6 @@ namespace backend.Controllers
     [ApiController]
     public class NoteController : Controller
     {
-
         private readonly NoteRepository _noteRepository;
 
         public NoteController(NoteRepository noteRepository)
@@ -20,9 +19,13 @@ namespace backend.Controllers
 
 
         [HttpGet]
-        [ProducesResponseType(typeof(NoteDTO[]), 200)]
-        public IActionResult GetNotes()
+        public ActionResult<NoteDTO[]> GetNotes()
         {
+            if (!AuthContext.IsRequestAuthorized(Request))
+            {
+                return Unauthorized();
+            }
+
             var notes = _noteRepository.GetNotes();
 
             if (ModelState.IsValid) { BadRequest(ModelState); }
@@ -30,9 +33,13 @@ namespace backend.Controllers
         }
 
         [HttpGet("{id}")]
-        [ProducesResponseType(typeof(NoteDTO), 200)]
-        public IActionResult GetNoteById(int id)
+        public ActionResult<NoteDTO> GetNoteById(int id)
         {
+            if (!AuthContext.IsRequestAuthorized(Request))
+            {
+                return Unauthorized();
+            }
+
             var note = _noteRepository.GetNoteById(id);
 
             if (note == null) { return NotFound(); }
@@ -40,10 +47,13 @@ namespace backend.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult CreateNote([FromBody] NoteDTO noteCreate)
+        public ActionResult<NoteDTO> CreateNote([FromBody] NoteDTO noteCreate)
         {
+            if (!AuthContext.IsRequestAuthorized(Request))
+            {
+                return Unauthorized();
+            }
+
             if (noteCreate == null) { return BadRequest(ModelState); }
 
             var note = _noteRepository.GetNotes()
@@ -58,12 +68,27 @@ namespace backend.Controllers
 
             if (!ModelState.IsValid) { return BadRequest(ModelState); }
 
-            return Ok();
+
+            try
+            {
+                var newNote = _noteRepository.CreateNote(noteCreate);
+                return Ok(newNote);
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", $"Something went wrong when saving the record {ex.Message}");
+                return StatusCode(500, ModelState);
+            }
         }
 
         [HttpDelete("{id}")]
         public ActionResult DeleteIssue(int id)
         {
+            if (!AuthContext.IsRequestAuthorized(Request))
+            {
+                return Unauthorized();
+            }
+
             try
             {
                 var issueToDelete = _noteRepository.GetNoteById(id);

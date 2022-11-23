@@ -1,19 +1,25 @@
 using Microsoft.AspNetCore.Mvc;
 namespace backend.Controllers;
 using System.IdentityModel.Tokens.Jwt;
+using backend.Repository;
 
 [ApiController]
 [Route("api/[controller]")]
 
 public class AuthController : ControllerBase
 {
-   /* private UserContext userContext = new UserContext();
+    private readonly UserRepository _userRepository;
+
+    public AuthController(UserRepository userRepository)
+    {
+        _userRepository = userRepository;
+    }
 
     [Route("login")]
     [HttpPost]
     public ActionResult<Token> Post([FromBody] Login request)
     {
-        var user = userContext.GetUserByEmail(request.Email);
+        var user = _userRepository.GetUserByEmail(request.Email);
         if (user == null)
         {
             return NotFound();
@@ -45,7 +51,7 @@ public class AuthController : ControllerBase
     [HttpPost]
     public ActionResult<User> Post([FromBody] UserDTO request)
     {
-        var userExists = userContext.GetUserByEmail(request.Email);
+        var userExists = _userRepository.GetUserByEmail(request.Email);
         if (userExists != null)
         {
             return Conflict();
@@ -54,7 +60,7 @@ public class AuthController : ControllerBase
         {
             try
             {
-                userContext.CreateUser(request, Role.User);
+                _userRepository.CreateUser(request, 2);
             }
             catch (Exception e)
             {
@@ -63,6 +69,6 @@ public class AuthController : ControllerBase
             return Ok();
         }
     }
-   */
+
 
 }

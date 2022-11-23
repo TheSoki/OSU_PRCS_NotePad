@@ -14,7 +14,7 @@ namespace backend
 
         public void SeedDataContext()
         {
-            if (!_dataContext.Notes.Any())
+            if (!_dataContext.Note.Any())
             {
                 var notes = new List<NoteDTO>()
                 {
@@ -46,7 +46,7 @@ namespace backend
                         State = StateType.Planned,
                     },
                 };
-                _dataContext.Notes.AddRange(notes);
+                _dataContext.Note.AddRange(notes);
                 _dataContext.SaveChanges();
             }
         }

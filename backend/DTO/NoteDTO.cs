@@ -1,8 +1,4 @@
-﻿using backend.model;
-using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
-// TODO: Finish DTO template, just here to adjust items rn.
-namespace backend.DTO
+﻿namespace backend.DTO
 {
     public class NoteDTO
     {
