@@ -16,9 +16,9 @@ namespace backend
         {
             if (!_dataContext.Notes.Any())
             {
-                var notes = new List<NotesDTO>()
+                var notes = new List<NoteDTO>()
                 {
-                    new NotesDTO()
+                    new NoteDTO()
                     {
                         Id = 1,
                         Title= "Test",
@@ -27,7 +27,7 @@ namespace backend
                         CompleteDate= DateTime.Now,
                         State = StateType.Planned,
                     },
-                     new NotesDTO()
+                     new NoteDTO()
                     {
                         Id = 2,
                         Title= "Test",
@@ -36,7 +36,7 @@ namespace backend
                         CompleteDate= DateTime.Now,
                         State = StateType.Planned,
                     },
-                      new NotesDTO()
+                      new NoteDTO()
                     {
                         Id = 3,
                         Title= "Test",

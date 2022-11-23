@@ -3,27 +3,27 @@ using backend.model;
 
 namespace backend.Repository
 {
-    public class NotesRepository
+    public class NoteRepository
     {
         private readonly DataContext _context;
-        public NotesRepository(DataContext context)
+        public NoteRepository(DataContext context)
         {
             _context = context;
 
         }
 
-        public bool CreateNote(NotesDTO note)
+        public bool CreateNote(NoteDTO note)
         {
             _context.Add(note);
             return Save();
         }
 
-        public ICollection<NotesDTO> GetNotes()
+        public ICollection<NoteDTO> GetNotes()
         {
             return _context.Notes.OrderBy(p => p.Id).ToList();
         }
 
-        public NotesDTO GetNoteById(int id)
+        public NoteDTO GetNoteById(int id)
         {
             return _context.Notes.Where(p => p.Id == id).FirstOrDefault();
         }

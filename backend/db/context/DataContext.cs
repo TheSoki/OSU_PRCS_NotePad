@@ -19,8 +19,8 @@ namespace backend.db.context
             options.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
         }
 
-        public DbSet<User> Users{ get; set; }
-        public DbSet<NotesDTO> Notes { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<NoteDTO> Notes { get; set; }
         public DbSet<Login> Logins { get; set; }
         public DbSet<Token> Tokens { get; set; }
 

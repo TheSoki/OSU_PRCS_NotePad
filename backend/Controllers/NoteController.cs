@@ -11,16 +11,16 @@ namespace backend.Controllers
     public class NoteController : Controller
     {
 
-        private readonly NotesRepository _noteRepository;
+        private readonly NoteRepository _noteRepository;
 
-        public NoteController(NotesRepository noteRepository)
+        public NoteController(NoteRepository noteRepository)
         {
             _noteRepository = noteRepository;
         }
 
 
         [HttpGet]
-        [ProducesResponseType(typeof(NotesDTO[]), 200)]
+        [ProducesResponseType(typeof(NoteDTO[]), 200)]
         public IActionResult GetNotes()
         {
             var notes = _noteRepository.GetNotes();
@@ -30,7 +30,7 @@ namespace backend.Controllers
         }
 
         [HttpGet("{id}")]
-        [ProducesResponseType(typeof(NotesDTO), 200)]
+        [ProducesResponseType(typeof(NoteDTO), 200)]
         public IActionResult GetNoteById(int id)
         {
             var note = _noteRepository.GetNoteById(id);
@@ -42,7 +42,7 @@ namespace backend.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult CreateNote([FromBody] NotesDTO noteCreate)
+        public IActionResult CreateNote([FromBody] NoteDTO noteCreate)
         {
             if (noteCreate == null) { return BadRequest(ModelState); }
 

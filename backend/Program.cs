@@ -16,7 +16,7 @@ builder.Services.AddDbContext<DataContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 builder.Services.AddTransient<Seed>();
-builder.Services.AddScoped<NotesRepository>();
+builder.Services.AddScoped<NoteRepository>();
 
 var app = builder.Build();
 
