@@ -1,5 +1,6 @@
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
-
+[Keyless]
 public class UserDTO
 {
     [Required]

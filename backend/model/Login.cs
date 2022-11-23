@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+
+[Keyless]
 public class Login
 {
     public string Password { get; set; } = String.Empty;
