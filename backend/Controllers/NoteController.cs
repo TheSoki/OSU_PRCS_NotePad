@@ -90,15 +90,15 @@ namespace backend.Controllers
                 return Unauthorized();
             }
 
+            var issueToDelete = _noteRepository.GetNoteById(id);
+
+            if (issueToDelete == null)
+            {
+                return NotFound($"Employee with Id = {id} not found");
+            }
+
             try
             {
-                var issueToDelete = _noteRepository.GetNoteById(id);
-
-                if (issueToDelete == null)
-                {
-                    return NotFound($"Employee with Id = {id} not found");
-                }
-
                 _noteRepository.deleteNoteById(id);
                 return Ok();
             }
@@ -111,6 +111,11 @@ namespace backend.Controllers
         [HttpPost("{id}")]
         public ActionResult UpdateNote(Note entryNote)
         {
+            if (!AuthContext.IsRequestAuthorized(Request))
+            {
+                return Unauthorized();
+            }
+
             var note = _noteRepository.GetNoteById(entryNote.Id);
 
             if (note == null)
