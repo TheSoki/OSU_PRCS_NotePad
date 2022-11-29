@@ -1,4 +1,5 @@
-﻿using backend.model;
+﻿using backend.DTO;
+using backend.model;
 using backend.Repository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -19,7 +20,7 @@ namespace backend.Controllers
 
 
         [HttpGet]
-        public ActionResult<NoteDTO[]> GetNotes()
+        public ActionResult<Note[]> GetNotes()
         {
             if (!AuthContext.IsRequestAuthorized(Request))
             {
@@ -33,7 +34,7 @@ namespace backend.Controllers
         }
 
         [HttpGet("{id}")]
-        public ActionResult<NoteDTO> GetNoteById(int id)
+        public ActionResult<Note> GetNoteById(int id)
         {
             if (!AuthContext.IsRequestAuthorized(Request))
             {
@@ -47,7 +48,7 @@ namespace backend.Controllers
         }
 
         [HttpPost]
-        public ActionResult<NoteDTO> CreateNote([FromBody] NoteDTO noteCreate)
+        public ActionResult<Note> CreateNote([FromBody] NoteDTO noteCreate)
         {
             if (!AuthContext.IsRequestAuthorized(Request))
             {
@@ -105,6 +106,29 @@ namespace backend.Controllers
             {
                 return BadRequest("Error deleting data");
             }
+        }
+
+        [HttpPost("{id}")]
+        public ActionResult UpdateNote(Note entryNote)
+        {
+            var note = _noteRepository.GetNoteById(entryNote.Id);
+
+            if (note == null)
+            {
+                return BadRequest($"Issue with id = {entryNote.Id} does not exist");
+            }
+
+            try
+            {
+                _noteRepository.UpdateNote(entryNote);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", $"Something went wrong when saving the record {ex.Message}");
+                return StatusCode(500, ModelState);
+            }
+
         }
     }
 }

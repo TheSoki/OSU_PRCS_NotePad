@@ -1,13 +1,16 @@
-﻿namespace backend.DTO
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace backend.DTO
 {
     public class NoteDTO
     {
-        public int Id { get; set; }
+        [Required]
+        [StringLength(100)]
         public string Title { get; set; } = string.Empty;
+        [Required]
+        [StringLength(120)]
         public string Description { get; set; } = string.Empty;
-        public DateTime CreationDate { get; set; }
-        public DateTime CompleteDate { get; set; }
-        public StateType State { get; set; }
+
     }
     public enum StateType
     {
