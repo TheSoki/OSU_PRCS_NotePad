@@ -19,7 +19,7 @@ namespace backend.db.context
         }
 
         public DbSet<User> User { get; set; }
-        public DbSet<Note> Note { get; set; }
+        public DbSet<Note> Notes { get; set; }
 
     }
 }
