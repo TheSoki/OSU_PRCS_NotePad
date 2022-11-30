@@ -12,20 +12,25 @@ builder.Services.AddDbContext<DataContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
-builder.Services.AddTransient<Seed>();
 builder.Services.AddScoped<NoteRepository>();
 builder.Services.AddScoped<UserRepository>();
 
 var app = builder.Build();
 
-if (args.Length == 1 && args[0].ToLower() == "seeddata")
+if (args.Length == 1 && args[0].ToLower() == "seed")
 {
     var scopedFactory = app.Services.GetService<IServiceScopeFactory>();
 
     using (var scope = scopedFactory.CreateScope())
     {
-        var service = scope.ServiceProvider.GetService<Seed>();
-        service.SeedDataContext();
+        DataContext _dataContext = scope.ServiceProvider.GetRequiredService<DataContext>();
+        _dataContext.Add(new User()
+        {
+            Id = 1,
+            Username = "Test",
+            Email = "test@test.com"
+        });
+        _dataContext.SaveChanges();
     }
 }
 
