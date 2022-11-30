@@ -17,7 +17,7 @@ public class AuthController : ControllerBase
 
     [Route("login")]
     [HttpPost]
-    public ActionResult<Token> Post([FromBody] Login request)
+    public ActionResult<Token> Post([FromBody] LoginDTO request)
     {
         var user = _userRepository.GetUserByEmail(request.Email);
         if (user == null)
@@ -49,7 +49,7 @@ public class AuthController : ControllerBase
 
     [Route("register")]
     [HttpPost]
-    public ActionResult<User> Post([FromBody] UserDTO request)
+    public ActionResult<User> Post([FromBody] RegisterDTO request)
     {
         var userExists = _userRepository.GetUserByEmail(request.Email);
         if (userExists != null)
@@ -60,7 +60,14 @@ public class AuthController : ControllerBase
         {
             try
             {
-                _userRepository.CreateUser(request, 2);
+                var user = new User
+                {
+                    Username = request.Username,
+                    Email = request.Email,
+                    Password = AuthContext.GenerateHash(request.Password),
+                    // Role = request. == 1 ? Role.Admin : Role.User,
+                };
+                _userRepository.CreateUser(user, 2);
             }
             catch (Exception e)
             {

@@ -10,16 +10,8 @@ namespace backend.Repository
             _context = context;
         }
 
-        public bool CreateUser(UserDTO userDto, int roleId)
+        public bool CreateUser(User user, int roleId)
         {
-            var user = new User()
-            {
-
-                Username = userDto.Username,
-                Email = userDto.Email,
-                Password = userDto.Password,
-                Role = roleId == 1 ? Role.Admin : Role.User,
-            };
             _context.Add(user);
             return Save();
         }
