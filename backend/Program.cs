@@ -19,18 +19,27 @@ var app = builder.Build();
 
 if (args.Length == 1 && args[0].ToLower() == "seed")
 {
+    Console.WriteLine("Seeding database...");
     var scopedFactory = app.Services.GetService<IServiceScopeFactory>();
 
-    using (var scope = scopedFactory.CreateScope())
+    if (scopedFactory != null)
     {
-        DataContext _dataContext = scope.ServiceProvider.GetRequiredService<DataContext>();
-        _dataContext.Add(new User()
+        using (var scope = scopedFactory.CreateScope())
         {
-            Id = 1,
-            Username = "Test",
-            Email = "test@test.com"
-        });
-        _dataContext.SaveChanges();
+            DataContext _dataContext = scope.ServiceProvider.GetRequiredService<DataContext>();
+            _dataContext.Add(new User()
+            {
+                Id = 1,
+                Username = "Test",
+                Email = "test@test.com"
+            });
+            _dataContext.SaveChanges();
+            Console.WriteLine("Database seeded.");
+        }
+    }
+    else
+    {
+        Console.WriteLine("Error: scopedFactory is null");
     }
 }
 

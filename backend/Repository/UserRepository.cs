@@ -24,12 +24,7 @@ namespace backend.Repository
             return Save();
         }
 
-        public User GetNoteById(int id)
-        {
-            return _context.User.Where(p => p.Id == id).FirstOrDefault();
-        }
-
-        public User GetUserByEmail(string email)
+        public User? GetUserByEmail(string email)
         {
             return _context.User.Where(p => p.Email == email).FirstOrDefault();
         }

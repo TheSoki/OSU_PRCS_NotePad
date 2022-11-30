@@ -31,7 +31,7 @@ namespace backend.Repository
             return _context.Note.OrderBy(p => p.Id).ToList();
         }
 
-        public Note GetNoteById(int id)
+        public Note? GetNoteById(int id)
         {
             return _context.Note.Where(p => p.Id == id).FirstOrDefault();
         }
@@ -39,15 +39,24 @@ namespace backend.Repository
         public bool deleteNoteById(int id)
         {
             var note = _context.Note.Where(p => p.Id == id).FirstOrDefault();
-            _context.Remove(note);
-            return Save();
+            if (note != null)
+            {
+                _context.Remove(note);
+                return Save();
+            }
+            return false;
         }
 
         public bool UpdateNote(Note note)
         {
             var entryNote = GetNoteById(note.Id);
-            _context.Entry(entryNote).CurrentValues.SetValues(note);
-            return Save();
+            if (entryNote != null)
+            {
+                _context.Entry(entryNote).CurrentValues.SetValues(note);
+                return Save();
+            }
+            return false;
+
         }
 
         public bool Save()
