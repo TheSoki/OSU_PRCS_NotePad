@@ -1,14 +1,14 @@
 import axios, { AxiosResponse } from 'axios'
 import React, { useState, useEffect } from 'react'
 import { BACKEND_URL } from '../utils/helpers'
-import { Note } from './types'
+import { NoteType } from './types'
 
-const fetchNotes = async (): Promise<Note[]> => {
+const fetchNotes = async (): Promise<NoteType[]> => {
     return await axios(`${BACKEND_URL}/Note`, {
         method: 'GET',
         withCredentials: true,
     })
-        .then((response: AxiosResponse<Note[]>) => {
+        .then((response: AxiosResponse<NoteType[]>) => {
             return response.data
         })
         .catch(() => {
@@ -24,7 +24,7 @@ const deleteNote = async (id: string): Promise<void> => {
 }
 
 export const NotesList = () => {
-    const [notes, setNotes] = useState<Note[]>([])
+    const [notes, setNotes] = useState<NoteType[]>([])
     const [isLoading, setIsLoading] = useState(true)
 
     const onDeleteClick = async (id: string) => {
@@ -37,10 +37,16 @@ export const NotesList = () => {
     }
 
     useEffect(() => {
-        fetchNotes().then((notes) => {
-            setNotes(notes)
-            setIsLoading(false)
-        })
+        fetchNotes()
+            .then((notes) => {
+                setNotes(notes)
+            })
+            .catch(() => {
+                setNotes([])
+            })
+            .finally(() => {
+                setIsLoading(false)
+            })
     }, [])
 
     if (isLoading) {
