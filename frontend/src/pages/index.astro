@@ -1,9 +1,13 @@
 ---
+import { NotesList } from '../components/NotesList';
+import { ProtectedLayout } from '../components/ProtectedLayout';
 import Layout from '../layouts/Layout.astro'
 ---
 
 <Layout title="Notepad">
     <main>
-        <h1>Welcome to <span class="text-gradient">Astro</span></h1>
+        <ProtectedLayout client:load>
+            <NotesList client:load/>
+        </ProtectedLayout>
     </main>
 </Layout>
