@@ -39,5 +39,13 @@ export const ProtectedLayout = ({
         )
     }
 
-    return <div>{children}</div>
+    return (
+        <div>
+            <nav className="flex space-x-2">
+                <a href="/">home</a>
+                <a href="/create">create</a>
+            </nav>
+            {children}
+        </div>
+    )
 }
