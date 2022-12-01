@@ -1,5 +1,4 @@
 ﻿
-using backend.model;
 using Microsoft.EntityFrameworkCore;
 
 namespace backend.db.context

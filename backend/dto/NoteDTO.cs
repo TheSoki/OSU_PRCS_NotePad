@@ -10,7 +10,3 @@ public class NoteDTO
     public string Description { get; set; } = string.Empty;
 
 }
-public enum StateType
-{
-    Planned, In_Progress, Done, Undefined
-}

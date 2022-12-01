@@ -27,11 +27,13 @@ if (args.Length == 1 && args[0].ToLower() == "seed")
         using (var scope = scopedFactory.CreateScope())
         {
             DataContext _dataContext = scope.ServiceProvider.GetRequiredService<DataContext>();
-            _dataContext.Add(new User()
+            _dataContext.User.Add(new User()
             {
                 Id = 1,
-                Username = "Test",
-                Email = "test@test.com"
+                Username = "admin",
+                Email = "admin@admin.com",
+                Password = AuthContext.GenerateHash("heslo"),
+                Role = Role.Admin,
             });
             _dataContext.SaveChanges();
             Console.WriteLine("Database seeded.");
