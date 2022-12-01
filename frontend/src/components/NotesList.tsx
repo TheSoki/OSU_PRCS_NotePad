@@ -3,24 +3,44 @@ import React, { useState, useEffect } from 'react'
 import { BACKEND_URL } from '../utils/helpers'
 import { Note } from './types'
 
+const fetchNotes = async (): Promise<Note[]> => {
+    return await axios(`${BACKEND_URL}/Note`, {
+        method: 'GET',
+        withCredentials: true,
+    })
+        .then((response: AxiosResponse<Note[]>) => {
+            return response.data
+        })
+        .catch(() => {
+            return []
+        })
+}
+
+const deleteNote = async (id: string): Promise<void> => {
+    await axios(`${BACKEND_URL}/Note/${id}`, {
+        method: 'DELETE',
+        withCredentials: true,
+    })
+}
+
 export const NotesList = () => {
     const [notes, setNotes] = useState<Note[]>([])
     const [isLoading, setIsLoading] = useState(true)
 
-    useEffect(() => {
-        axios(`${BACKEND_URL}/Note`, {
-            method: 'GET',
-            withCredentials: true,
+    const onDeleteClick = async (id: string) => {
+        setIsLoading(true)
+        await deleteNote(id)
+        await fetchNotes().then((notes) => {
+            setNotes(notes)
+            setIsLoading(false)
         })
-            .then((res: AxiosResponse<Note[]>) => {
-                setNotes(res.data)
-            })
-            .catch(() => {
-                setNotes([])
-            })
-            .finally(() => {
-                setIsLoading(false)
-            })
+    }
+
+    useEffect(() => {
+        fetchNotes().then((notes) => {
+            setNotes(notes)
+            setIsLoading(false)
+        })
     }, [])
 
     if (isLoading) {
@@ -39,6 +59,21 @@ export const NotesList = () => {
                             <p className="text-grey-darker text-base">
                                 {note.description}
                             </p>
+                            <div className="flex items-center justify-between mx-2 mt-4">
+                                <a
+                                    className="bg-blue-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded"
+                                    href={`/edit/${note.id}`}
+                                >
+                                    Edit
+                                </a>
+
+                                <button
+                                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded"
+                                    onClick={() => onDeleteClick(note.id)}
+                                >
+                                    Delete
+                                </button>
+                            </div>
                         </div>
                     </li>
                 ))}
