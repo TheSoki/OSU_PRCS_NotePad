@@ -1,10 +1,7 @@
-import type { NextPage } from 'next'
-import { CreateNote } from '../../src/components/CreateNote'
 import { Header } from '../../src/components/Header'
-import { ProtectedLayout } from '../../src/components/ProtectedLayout'
 import { Login as LoginComponent } from '../../src/components/Login'
 
-const Login: NextPage = () => (
+const LoginPage = () => (
     <>
         <Header />
         <main>
@@ -15,4 +12,4 @@ const Login: NextPage = () => (
     </>
 )
 
-export default Login
+export default LoginPage

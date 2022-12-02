@@ -3,7 +3,7 @@ import { Header } from '../src/components/Header'
 import { NotesList } from '../src/components/NotesList'
 import { ProtectedLayout } from '../src/components/ProtectedLayout'
 
-const Home: NextPage = () => (
+const HomePage = () => (
     <>
         <Header />
         <main>
@@ -14,4 +14,4 @@ const Home: NextPage = () => (
     </>
 )
 
-export default Home
+export default HomePage

@@ -1,7 +1,8 @@
 import axios from 'axios'
 import classNames from 'classnames'
 import { Form, Formik } from 'formik'
-import React, { useState } from 'react'
+import Router from 'next/router'
+import { useState } from 'react'
 import Zod from 'zod'
 import { toFormikValidationSchema } from 'zod-formik-adapter'
 import { BACKEND_URL } from '../utils/helpers'
@@ -21,7 +22,7 @@ const initialValues: RegisterType = {
 
 const validationSchema = Zod.object({
     email: Zod.string().email(),
-    password: Zod.string().min(8),
+    password: Zod.string().min(3),
 })
 
 export const Register = () => {
@@ -35,6 +36,7 @@ export const Register = () => {
                 method: 'POST',
                 data: values,
             })
+            Router.push('/login')
         } catch {
             setIsError(true)
         }
@@ -79,7 +81,7 @@ export const Register = () => {
                             type="submit"
                             disabled={isSubmitted || isSubmitting}
                         >
-                            Button
+                            Submit
                         </button>
                     </Form>
                 )}

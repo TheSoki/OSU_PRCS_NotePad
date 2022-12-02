@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from 'axios'
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { BACKEND_URL } from '../utils/helpers'
 import { NoteType } from './types'
 
@@ -38,9 +38,7 @@ export const NotesList = () => {
 
     useEffect(() => {
         fetchNotes()
-            .then((notes) => {
-                setNotes(notes)
-            })
+            .then(setNotes)
             .catch(() => {
                 setNotes([])
             })

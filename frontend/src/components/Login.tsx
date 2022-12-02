@@ -1,7 +1,8 @@
 import axios from 'axios'
 import classNames from 'classnames'
 import { Form, Formik } from 'formik'
-import React, { useState } from 'react'
+import Router from 'next/router'
+import { useState } from 'react'
 import Zod from 'zod'
 import { toFormikValidationSchema } from 'zod-formik-adapter'
 import { BACKEND_URL } from '../utils/helpers'
@@ -19,7 +20,7 @@ const initialValues: LoginType = {
 
 const validationSchema = Zod.object({
     email: Zod.string().email(),
-    password: Zod.string().min(8),
+    password: Zod.string().min(3),
 })
 
 export const Login = () => {
@@ -34,6 +35,7 @@ export const Login = () => {
                 data: values,
                 withCredentials: true,
             })
+            Router.push('/')
         } catch {
             setIsError(true)
         }
@@ -73,7 +75,7 @@ export const Login = () => {
                             type="submit"
                             disabled={isSubmitted || isSubmitting}
                         >
-                            Button
+                            Submit
                         </button>
                     </Form>
                 )}

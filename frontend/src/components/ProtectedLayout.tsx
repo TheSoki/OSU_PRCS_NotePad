@@ -1,5 +1,5 @@
-import axios, { Axios, AxiosResponse } from 'axios'
-import React, { useEffect, useState } from 'react'
+import axios, { AxiosResponse } from 'axios'
+import { useEffect, useState } from 'react'
 import { BACKEND_URL } from '../utils/helpers'
 
 export const ProtectedLayout = ({
@@ -44,6 +44,15 @@ export const ProtectedLayout = ({
             <nav className="flex space-x-2">
                 <a href="/">home</a>
                 <a href="/create">create</a>
+                <button
+                    onClick={() => {
+                        document.cookie =
+                            'token=; expires= Thu, 21 Aug 2014 20:00:00 UTC'
+                        window.location.href = '/'
+                    }}
+                >
+                    logout
+                </button>
             </nav>
             {children}
         </div>

@@ -1,38 +1,40 @@
-import axios from 'axios'
+import axios, { AxiosResponse } from 'axios'
 import classNames from 'classnames'
 import { Formik, Form } from 'formik'
-import { useState } from 'react'
-import Zod from 'zod'
+import Router from 'next/router'
+import { FC, useEffect, useState } from 'react'
 import { toFormikValidationSchema } from 'zod-formik-adapter'
 import { BACKEND_URL } from '../utils/helpers'
 import { FormikField } from './FormikField'
 import { noteValidationSchema } from './schema'
-import { NoteType as NoteOriginalType } from './types'
+import { NoteType } from './types'
 
-type NoteType = {
-    title: Pick<NoteOriginalType, 'title'>['title']
-    description: Pick<NoteOriginalType, 'description'>['description']
-    creationDate: string
-    completeDate: string
-    state: Pick<NoteOriginalType, 'state'>['state']
+const fetchNote = async (id: string): Promise<NoteType | null> => {
+    return await axios(`${BACKEND_URL}/Note/${id}`, {
+        method: 'GET',
+        withCredentials: true,
+    })
+        .then((response: AxiosResponse<NoteType[]>) => {
+            if (response.data.length === 0) {
+                return null
+            }
+            return response.data[0]
+        })
+        .catch(() => {
+            return null
+        })
 }
 
-const initialValues: NoteType = {
-    title: '',
-    description: '',
-    state: 0,
-    completeDate: '',
-    creationDate: '',
-}
-
-export const CreateNote = () => {
+export const EditNote: FC<{ id: string }> = ({ id }) => {
+    const [defaultValue, setDefaultValue] = useState<NoteType | null>(null)
+    const [isLoading, setIsLoading] = useState(true)
     const [isSubmitted, setIsSubmitted] = useState(false)
     const [isError, setIsError] = useState(false)
 
     const onSubmit = (values: NoteType) => {
         setIsSubmitted(true)
         try {
-            axios(`${BACKEND_URL}/Note`, {
+            axios(`${BACKEND_URL}/Note/${values.id}`, {
                 method: 'POST',
                 data: {
                     ...values,
@@ -41,19 +43,38 @@ export const CreateNote = () => {
                 },
                 withCredentials: true,
             })
+            Router.push('/')
         } catch {
             setIsError(true)
         }
     }
 
+    useEffect(() => {
+        fetchNote(id)
+            .then(setDefaultValue)
+            .finally(() => {
+                setIsLoading(false)
+            })
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+
+    if (isLoading) {
+        return <div>Loading...</div>
+    }
+
+    if (!defaultValue) {
+        return <div>Not found</div>
+    }
+    console.log(defaultValue)
     return (
         <>
             <Formik<NoteType>
                 onSubmit={onSubmit}
-                initialValues={initialValues}
+                initialValues={defaultValue}
                 validationSchema={toFormikValidationSchema(
                     noteValidationSchema
                 )}
+                enableReinitialize
             >
                 {({ isSubmitting }) => (
                     <Form>
