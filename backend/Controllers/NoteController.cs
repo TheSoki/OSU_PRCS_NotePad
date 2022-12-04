@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace backend.Controllers
 {
@@ -132,6 +133,52 @@ namespace backend.Controllers
                 return StatusCode(500, ModelState);
             }
 
+        }
+
+        [HttpPost]
+        [Route("export")]
+        public ActionResult ExportToTxt()
+        {
+            if (!AuthContext.IsRequestAuthorized(Request))
+            {
+                return Unauthorized();
+            }
+
+            string[] columnNames = new string[] { "Id", "Title", "Description", "Creation Date", "Complete Date", "State" };
+            var notes = _noteRepository.GetNotes();
+
+            //Build the txt file data as a Comma separated string.
+            string txt = string.Empty;
+
+            foreach (string columnName in columnNames)
+            {
+                //Add the Header row for txt file.
+                txt += columnName + ',';
+            }
+
+            //Add new line.
+            txt += "\r\n";
+
+            foreach (var note in notes)
+            {
+                //Add the Data rows.
+                txt += note.Id + ',';
+                txt += ',';
+                txt += note.Title.Replace(",", ";") + ',';
+                txt += note.Description.Replace(",", ";") + ',';
+                txt += note.CreationDate;
+                txt += ',';
+                txt += note.CompleteDate;
+                txt += ',';
+                txt += note.State + ',';
+
+                //Add new line.
+                txt += "\r\n";
+            }
+
+            //Download the txt file.
+            byte[] bytes = Encoding.ASCII.GetBytes(txt);
+            return File(bytes, "text/txt", "Notes.txt");
         }
     }
 }
