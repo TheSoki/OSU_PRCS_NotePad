@@ -8,6 +8,7 @@ import { BACKEND_URL } from '../utils/helpers'
 import { FormikField } from './FormikField'
 import { noteValidationSchema } from './schema'
 import { NoteType as NoteOriginalType } from './types'
+import Router from 'next/router'
 
 type NoteType = {
     title: Pick<NoteOriginalType, 'title'>['title']
@@ -41,6 +42,7 @@ export const CreateNote = () => {
                 },
                 withCredentials: true,
             })
+            Router.push('/')
         } catch {
             setIsError(true)
         }
