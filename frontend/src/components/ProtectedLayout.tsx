@@ -41,10 +41,15 @@ export const ProtectedLayout = ({
 
     return (
         <div>
-            <nav className="flex space-x-2">
-                <a href="/">home</a>
-                <a href="/create">create</a>
+            <nav className="flex">
+                <a className="mr-4" href="/">
+                    home
+                </a>
+                <a className="mr-4" href="/create">
+                    create
+                </a>
                 <button
+                    className="ml-auto"
                     onClick={() => {
                         document.cookie =
                             'token=; expires= Thu, 21 Aug 2014 20:00:00 UTC'

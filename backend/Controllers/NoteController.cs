@@ -107,7 +107,7 @@ namespace backend.Controllers
             }
         }
 
-        [HttpPost("{id}")]
+        [HttpPut]
         public ActionResult UpdateNote(Note entryNote)
         {
             if (!AuthContext.IsRequestAuthorized(Request))

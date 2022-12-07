@@ -34,8 +34,8 @@ export const EditNote: FC<{ id: string }> = ({ id }) => {
     const onSubmit = (values: NoteType) => {
         setIsSubmitted(true)
         try {
-            axios(`${BACKEND_URL}/Note/${values.id}`, {
-                method: 'POST',
+            axios(`${BACKEND_URL}/Note`, {
+                method: 'PUT',
                 data: {
                     ...values,
                     completeDate: new Date(values.completeDate).toISOString(),
