@@ -15,8 +15,7 @@ public class NoteDTO
     [Required]
     public DateTime CreationDate { get; set; }
 
-    [Required]
-    public DateTime CompleteDate { get; set; }
+    public DateTime? CompleteDate { get; set; }
 
     [Required]
     public StateType IsComplete { get; set; }
