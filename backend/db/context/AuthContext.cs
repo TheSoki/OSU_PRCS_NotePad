@@ -24,7 +24,7 @@ public static class AuthContext
     }
 
 
-    public static Boolean IsHashValid(string savedPasswordHash, string password)
+    public static bool IsHashValid(string savedPasswordHash, string password)
     {
         byte[] hashBytes = Convert.FromBase64String(savedPasswordHash);
         byte[] salt = new byte[16];
@@ -64,7 +64,7 @@ public static class AuthContext
         return token;
     }
 
-    public static Boolean IsTokenValid(string token)
+    public static bool IsTokenValid(string token)
     {
         var bytesKey = System.Text.Encoding.UTF8.GetBytes(_Secret);
         var securityKey = new SymmetricSecurityKey(bytesKey);
@@ -94,7 +94,7 @@ public static class AuthContext
         return true;
     }
 
-    public static Boolean IsRequestAuthorized(HttpRequest request)
+    public static bool IsRequestAuthorized(HttpRequest request)
     {
 
         if (request.Cookies.ContainsKey("token"))

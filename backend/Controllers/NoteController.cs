@@ -1,8 +1,5 @@
 ﻿using backend.Repository;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
 
 namespace backend.Controllers
 {
@@ -10,11 +7,11 @@ namespace backend.Controllers
     [ApiController]
     public class NoteController : Controller
     {
-        private readonly NoteRepository _noteRepository;
+        private readonly NoteService _noteService;
 
         public NoteController(NoteRepository noteRepository)
         {
-            _noteRepository = noteRepository;
+            _noteService = new NoteService(noteRepository);
         }
 
 
@@ -26,9 +23,8 @@ namespace backend.Controllers
                 return Unauthorized();
             }
 
-            var notes = _noteRepository.GetNotes();
+            var notes = _noteService.GetNotes();
 
-            if (ModelState.IsValid) { BadRequest(ModelState); }
             return Ok(notes);
         }
 
@@ -40,99 +36,68 @@ namespace backend.Controllers
                 return Unauthorized();
             }
 
-            var note = _noteRepository.GetNoteById(id);
+            var note = _noteService.GetNoteById(id);
+            if (note == null)
+            {
+                return NotFound();
+            }
 
-            if (note == null) { return NotFound(); }
             return Ok(note);
         }
 
         [HttpPost]
-        public ActionResult<Note> CreateNote([FromBody] NoteDTO noteCreate)
+        public ActionResult CreateNote([FromBody] NoteDTO noteCreate)
         {
             if (!AuthContext.IsRequestAuthorized(Request))
             {
                 return Unauthorized();
             }
 
-            if (noteCreate == null) { return BadRequest(ModelState); }
 
-            var note = _noteRepository.GetNotes()
-                  .Where(c => c.Title.Trim().ToUpper() == noteCreate.Title.TrimEnd().ToUpper())
-                  .FirstOrDefault();
+            var newNote = _noteService.CreateNote(noteCreate);
 
-            if (note != null)
+            if (!newNote)
             {
-                ModelState.AddModelError("", "Issue with this title already exists.");
-                return StatusCode(422, ModelState);
+                return BadRequest("Error creating note");
             }
 
-            if (!ModelState.IsValid) { return BadRequest(ModelState); }
-
-
-            try
-            {
-                var newNote = _noteRepository.CreateNote(noteCreate);
-                return Ok(newNote);
-            }
-            catch (Exception ex)
-            {
-                ModelState.AddModelError("", $"Something went wrong when saving the record {ex.Message}");
-                return StatusCode(500, ModelState);
-            }
+            return Ok();
         }
 
         [HttpDelete("{id}")]
-        public ActionResult DeleteIssue(int id)
+        public ActionResult DeleteNote(int id)
         {
             if (!AuthContext.IsRequestAuthorized(Request))
             {
                 return Unauthorized();
             }
 
-            var issueToDelete = _noteRepository.GetNoteById(id);
+            var note = _noteService.DeleteNoteById(id);
 
-            if (issueToDelete == null)
+            if (!note)
             {
-                return NotFound($"Employee with Id = {id} not found");
+                return BadRequest("Error deleting note");
             }
 
-            try
-            {
-                _noteRepository.deleteNoteById(id);
-                return Ok();
-            }
-            catch (Exception)
-            {
-                return BadRequest("Error deleting data");
-            }
+            return Ok();
         }
 
         [HttpPut]
-        public ActionResult UpdateNote(Note entryNote)
+        public ActionResult UpdateNote(UpdateNoteDTO noteUpdate)
         {
             if (!AuthContext.IsRequestAuthorized(Request))
             {
                 return Unauthorized();
             }
 
-            var note = _noteRepository.GetNoteById(entryNote.Id);
+            var note = _noteService.UpdateNoteById(noteUpdate);
 
-            if (note == null)
+            if (!note)
             {
-                return BadRequest($"Issue with id = {entryNote.Id} does not exist");
+                return BadRequest("Error updating note");
             }
 
-            try
-            {
-                _noteRepository.UpdateNote(entryNote);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                ModelState.AddModelError("", $"Something went wrong when saving the record {ex.Message}");
-                return StatusCode(500, ModelState);
-            }
-
+            return Ok();
         }
 
         [HttpPost]
@@ -144,40 +109,8 @@ namespace backend.Controllers
                 return Unauthorized();
             }
 
-            string[] columnNames = new string[] { "Id", "Title", "Description", "Creation Date", "Complete Date", "State" };
-            var notes = _noteRepository.GetNotes();
+            var bytes = _noteService.ExportIntoBytes();
 
-            //Build the txt file data as a Comma separated string.
-            string txt = string.Empty;
-
-            foreach (string columnName in columnNames)
-            {
-                //Add the Header row for txt file.
-                txt += columnName + ',';
-            }
-
-            //Add new line.
-            txt += "\r\n";
-
-            foreach (var note in notes)
-            {
-                //Add the Data rows.
-                txt += note.Id + ',';
-                txt += ',';
-                txt += note.Title.Replace(",", ";") + ',';
-                txt += note.Description.Replace(",", ";") + ',';
-                txt += note.CreationDate;
-                txt += ',';
-                txt += note.CompleteDate;
-                txt += ',';
-                txt += note.State + ',';
-
-                //Add new line.
-                txt += "\r\n";
-            }
-
-            //Download the txt file.
-            byte[] bytes = Encoding.ASCII.GetBytes(txt);
             return File(bytes, "text/txt", "Notes.txt");
         }
     }

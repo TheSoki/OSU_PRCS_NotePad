@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-
-public class Note
+﻿public class Note
 {
     public int Id { get; set; }
     public string Title { get; set; } = string.Empty;

@@ -34,7 +34,7 @@ namespace backend.Repository
             return _context.Note.Where(p => p.Id == id).FirstOrDefault();
         }
 
-        public bool deleteNoteById(int id)
+        public bool DeleteNoteById(int id)
         {
             var note = _context.Note.Where(p => p.Id == id).FirstOrDefault();
             if (note != null)
