@@ -1,13 +1,12 @@
 import axios, { AxiosResponse } from 'axios'
 import classNames from 'classnames'
-import { Formik, Form } from 'formik'
+import { Form, Formik } from 'formik'
 import Router from 'next/router'
 import { FC, useEffect, useState } from 'react'
+import Zod from 'zod'
 import { toFormikValidationSchema } from 'zod-formik-adapter'
 import { BACKEND_URL } from '../utils/helpers'
 import { FormikField } from './FormikField'
-import { noteValidationSchema } from './schema'
-import { NoteType } from './types'
 
 const fetchNote = async (id: string): Promise<NoteType | null> => {
     return await axios(`${BACKEND_URL}/Note/${id}`, {
@@ -23,6 +22,23 @@ const fetchNote = async (id: string): Promise<NoteType | null> => {
         .catch(() => {
             return null
         })
+}
+
+const noteValidationSchema = Zod.object({
+    title: Zod.string(),
+    description: Zod.string(),
+    state: Zod.number(),
+    completeDate: Zod.string(),
+    creationDate: Zod.string(),
+})
+
+type NoteType = {
+    id: string
+    title: string
+    description: string
+    creationDate: Date
+    completeDate: Date
+    state: number
 }
 
 export const EditNote: FC<{ id: string }> = ({ id }) => {
@@ -65,7 +81,7 @@ export const EditNote: FC<{ id: string }> = ({ id }) => {
     if (!defaultValue) {
         return <div>Not found</div>
     }
-    console.log(defaultValue)
+
     return (
         <>
             <Formik<NoteType>
@@ -77,48 +93,56 @@ export const EditNote: FC<{ id: string }> = ({ id }) => {
                 enableReinitialize
             >
                 {({ isSubmitting }) => (
-                    <Form>
+                    <Form className="w-min mx-auto">
                         <FormikField
                             name="title"
-                            placeholder="Title"
+                            label="Title"
                             disabled={isSubmitted || isSubmitting}
                         />
                         <FormikField
                             name="description"
-                            placeholder="Description"
+                            label="Description"
                             disabled={isSubmitted || isSubmitting}
                         />
                         <FormikField
                             name="state"
                             type="number"
-                            placeholder="State"
+                            label="State"
                             disabled={isSubmitted || isSubmitting}
                         />
                         <FormikField
                             name="completeDate"
                             type="date"
+                            label="Complete date"
                             disabled={isSubmitted || isSubmitting}
                         />
                         <FormikField
                             name="creationDate"
                             type="date"
+                            label="Creation date"
                             disabled={isSubmitted || isSubmitting}
                         />
-                        <button
-                            className={classNames(
-                                'bg-blue-500 py-2 px-4 font-bold',
-                                {
-                                    'hover:bg-blue-700 text-white border border-blue-700 rounded':
-                                        !(isSubmitted || isSubmitting),
-                                    'text-white rounded opacity-50 cursor-not-allowed':
-                                        isSubmitted || isSubmitting,
-                                }
-                            )}
-                            type="submit"
-                            disabled={isSubmitted || isSubmitting}
-                        >
-                            Submit
-                        </button>
+                        <div className="flex justify-center">
+                            <button
+                                className={classNames(
+                                    'bg-blue-500 py-2 px-4 font-bold',
+                                    {
+                                        'hover:bg-blue-700 text-white border border-blue-700 rounded':
+                                            !(isSubmitted || isSubmitting),
+                                        'text-white rounded opacity-50 cursor-not-allowed':
+                                            isSubmitted || isSubmitting,
+                                    }
+                                )}
+                                type="submit"
+                                disabled={isSubmitted || isSubmitting}
+                            >
+                                {isSubmitting
+                                    ? 'Submitting...'
+                                    : isSubmitted
+                                    ? 'Submitted'
+                                    : 'Submit'}
+                            </button>
+                        </div>
                     </Form>
                 )}
             </Formik>

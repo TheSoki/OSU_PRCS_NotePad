@@ -38,7 +38,9 @@ public class NoteService
         {
             Title = noteCreate.Title,
             Description = noteCreate.Description,
-
+            CreationDate = DateTime.Now,
+            CompleteDate = null,
+            State = StateType.Planned
         };
 
         try

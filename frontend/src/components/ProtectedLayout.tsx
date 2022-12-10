@@ -40,26 +40,28 @@ export const ProtectedLayout = ({
     }
 
     return (
-        <div>
-            <nav className="flex">
-                <a className="mr-4" href="/">
-                    home
-                </a>
-                <a className="mr-4" href="/create">
-                    create
-                </a>
-                <button
-                    className="ml-auto"
-                    onClick={() => {
-                        document.cookie =
-                            'token=; expires= Thu, 21 Aug 2014 20:00:00 UTC'
-                        window.location.href = '/'
-                    }}
-                >
-                    logout
-                </button>
-            </nav>
-            {children}
-        </div>
+        <>
+            <div className="border-b-2 border-gray-200 mb-2">
+                <nav className="max-w-10xl mx-auto flex px-10 py-4">
+                    <a className="mr-4 uppercase font-medium" href="/">
+                        home
+                    </a>
+                    <a className="mr-4 uppercase font-medium" href="/create">
+                        create
+                    </a>
+                    <button
+                        className="ml-auto uppercase font-medium"
+                        onClick={() => {
+                            document.cookie =
+                                'token=; expires= Thu, 21 Aug 2014 20:00:00 UTC'
+                            window.location.href = '/'
+                        }}
+                    >
+                        logout
+                    </button>
+                </nav>
+            </div>
+            <div className="max-w-9xl mx-auto">{children}</div>
+        </>
     )
 }

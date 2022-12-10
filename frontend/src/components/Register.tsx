@@ -81,7 +81,11 @@ export const Register = () => {
                             type="submit"
                             disabled={isSubmitted || isSubmitting}
                         >
-                            Submit
+                            {isSubmitting
+                                ? 'Submitting...'
+                                : isSubmitted
+                                ? 'Submitted'
+                                : 'Submit'}
                         </button>
                     </Form>
                 )}
