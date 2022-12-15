@@ -76,6 +76,12 @@ public class NoteService
 
         note.Title = noteUpdate.Title;
         note.Description = noteUpdate.Description;
+        note.State = noteUpdate.State;
+
+        if (note.State == StateType.Done)
+        {
+            note.CompleteDate = DateTime.Now;
+        }
 
         try
         {

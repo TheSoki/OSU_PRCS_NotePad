@@ -19,7 +19,7 @@ export const FormikField: FC<FormikFieldType> = ({
 }) => (
     <Field name={name}>
         {({ field, meta }: FieldAttributes<any>) => (
-            <div className="mb-3 xl:w-96">
+            <div className="mb-3 w-max md:w-96">
                 {label && (
                     <label
                         htmlFor="exampleFormControlInpu3"

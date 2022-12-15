@@ -28,16 +28,12 @@ const noteValidationSchema = Zod.object({
     title: Zod.string(),
     description: Zod.string(),
     state: Zod.number(),
-    completeDate: Zod.string(),
-    creationDate: Zod.string(),
 })
 
 type NoteType = {
     id: string
     title: string
     description: string
-    creationDate: Date
-    completeDate: Date
     state: number
 }
 
@@ -52,11 +48,7 @@ export const EditNote: FC<{ id: string }> = ({ id }) => {
         try {
             axios(`${BACKEND_URL}/Note`, {
                 method: 'PUT',
-                data: {
-                    ...values,
-                    completeDate: new Date(values.completeDate).toISOString(),
-                    creationDate: new Date(values.creationDate).toISOString(),
-                },
+                data: values,
                 withCredentials: true,
             })
             Router.push('/')
@@ -108,18 +100,6 @@ export const EditNote: FC<{ id: string }> = ({ id }) => {
                             name="state"
                             type="number"
                             label="State"
-                            disabled={isSubmitted || isSubmitting}
-                        />
-                        <FormikField
-                            name="completeDate"
-                            type="date"
-                            label="Complete date"
-                            disabled={isSubmitted || isSubmitting}
-                        />
-                        <FormikField
-                            name="creationDate"
-                            type="date"
-                            label="Creation date"
                             disabled={isSubmitted || isSubmitting}
                         />
                         <div className="flex justify-center">

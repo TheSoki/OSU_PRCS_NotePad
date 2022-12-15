@@ -14,12 +14,6 @@ public class UpdateNoteDTO
     public string Description { get; set; } = string.Empty;
 
     [Required]
-    public DateTime CreationDate { get; set; }
-
-    [Required]
-    public DateTime CompleteDate { get; set; }
-
-    [Required]
-    public StateType IsComplete { get; set; }
+    public StateType State { get; set; }
 
 }

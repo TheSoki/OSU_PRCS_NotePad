@@ -6,9 +6,9 @@ const RegisterPage = () => (
     <>
         <Header />
         <main>
-            <ProtectedLayout>
+            <div className="min-h-screen flex justify-center items-center">
                 <RegisterComponent />
-            </ProtectedLayout>
+            </div>
         </main>
     </>
 )

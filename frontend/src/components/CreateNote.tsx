@@ -8,31 +8,19 @@ import { FormikField } from './FormikField'
 import Router from 'next/router'
 import Zod from 'zod'
 
-type NoteOriginalType = {
-    id: string
+type NoteType = {
     title: string
     description: string
-    creationDate: Date
-    completeDate: Date
-    state: number
-}
-
-type NoteType = {
-    title: Pick<NoteOriginalType, 'title'>['title']
-    description: Pick<NoteOriginalType, 'description'>['description']
-    state: Pick<NoteOriginalType, 'state'>['state']
 }
 
 const initialValues: NoteType = {
     title: '',
     description: '',
-    state: 0,
 }
 
 const noteValidationSchema = Zod.object({
     title: Zod.string(),
     description: Zod.string(),
-    state: Zod.number(),
 })
 
 export const CreateNote = () => {
@@ -72,12 +60,6 @@ export const CreateNote = () => {
                         <FormikField
                             name="description"
                             label="Description"
-                            disabled={isSubmitted || isSubmitting}
-                        />
-                        <FormikField
-                            name="state"
-                            type="number"
-                            label="State"
                             disabled={isSubmitted || isSubmitting}
                         />
                         <div className="flex justify-center">
