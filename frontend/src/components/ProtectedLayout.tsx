@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from 'axios'
+import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { BACKEND_URL } from '../utils/helpers'
 
@@ -11,30 +11,31 @@ export const ProtectedLayout = ({
     const [isLoading, setIsLoading] = useState(true)
 
     useEffect(() => {
-        axios(`${BACKEND_URL}/Auth/isAuthenticated`, {
-            method: 'GET',
-            withCredentials: true,
-        })
-            .then((res: AxiosResponse<boolean>) => {
-                setIsAuthenticated(!!res.data)
-            })
-            .catch(() => {
-                setIsAuthenticated(false)
-            })
-            .finally(() => {
-                setIsLoading(false)
-            })
+        if (
+            document.cookie
+                .split(';')
+                .some((item) => item.trim().startsWith('token='))
+        ) {
+            setIsAuthenticated(true)
+        }
+        setIsLoading(false)
     }, [])
 
     if (isLoading) {
-        return <div>Loading...</div>
+        return <></>
     }
 
     if (!isAuthenticated) {
         return (
-            <div>
-                Not authenticated go to
-                <a href="/login">login</a>
+            <div className="min-w-max min-h-screen flex flex-col justify-center items-center space-y-2">
+                <span>Not authenticated go to</span>
+                <span className="text-xl">
+                    <Link href="login">login</Link>
+                </span>
+                <span>or</span>
+                <span className="text-xl">
+                    <Link href="register">register</Link>
+                </span>
             </div>
         )
     }
@@ -43,12 +44,12 @@ export const ProtectedLayout = ({
         <>
             <div className="border-b-2 border-gray-200 mb-2">
                 <nav className="max-w-10xl mx-auto flex px-10 py-4">
-                    <a className="mr-4 uppercase font-medium" href="/">
+                    <Link className="mr-4 uppercase font-medium" href="/">
                         home
-                    </a>
-                    <a className="mr-4 uppercase font-medium" href="/create">
+                    </Link>
+                    <Link className="mr-4 uppercase font-medium" href="create">
                         create
-                    </a>
+                    </Link>
                     <button
                         className="ml-auto uppercase font-medium"
                         onClick={() => {

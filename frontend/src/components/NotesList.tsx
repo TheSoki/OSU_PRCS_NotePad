@@ -1,4 +1,3 @@
-import axios, { AxiosResponse } from 'axios'
 import { useState, useEffect } from 'react'
 import { BACKEND_URL } from '../utils/helpers'
 import { NoteActions } from './NoteActions'
@@ -13,28 +12,34 @@ type NoteType = {
 }
 
 const fetchNotes = async (): Promise<NoteType[]> => {
-    return await axios(`${BACKEND_URL}/Note`, {
+    const data = await fetch(`${BACKEND_URL}/Note`, {
         method: 'GET',
-        withCredentials: true,
+        credentials: 'include',
     })
-        .then((response: AxiosResponse<NoteType[]>) => {
-            return response.data.map((note) => ({
-                ...note,
-                creationDate: new Date(note.creationDate),
-                completeDate: !!note.completeDate
-                    ? new Date(note.completeDate)
-                    : null,
-            }))
+        .then((res) => res.json())
+        .then((data) => {
+            const notes: NoteType[] = data.map((note: any) => {
+                return {
+                    id: note.id,
+                    title: note.title,
+                    description: note.description,
+                    creationDate: new Date(note.creationDate),
+                    completeDate: note.completeDate
+                        ? new Date(note.completeDate)
+                        : null,
+                    state: note.state,
+                }
+            })
+            return notes
         })
-        .catch(() => {
-            return []
-        })
+
+    return data
 }
 
 const deleteNote = async (id: string): Promise<void> => {
-    await axios(`${BACKEND_URL}/Note/${id}`, {
+    await fetch(`${BACKEND_URL}/Note/${id}`, {
         method: 'DELETE',
-        withCredentials: true,
+        credentials: 'include',
     })
 }
 
@@ -66,9 +71,8 @@ export const NotesList = () => {
 
     useEffect(() => {
         fetchNotes()
-            .then(setNotes)
-            .catch(() => {
-                setNotes([])
+            .then((notes) => {
+                setNotes(notes)
             })
             .finally(() => {
                 setIsLoading(false)
@@ -89,7 +93,7 @@ export const NotesList = () => {
                                 <p>{processNoteState(note.state)}</p>
                                 <NoteActions
                                     onDeleteClick={() => onDeleteClick(note.id)}
-                                    editHref={`/edit/${note.id}`}
+                                    editHref={`edit/${note.id}`}
                                 />
                             </div>
                             <h3 className="font-bold text-xl mb-3">

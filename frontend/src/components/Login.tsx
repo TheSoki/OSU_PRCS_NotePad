@@ -1,4 +1,3 @@
-import axios from 'axios'
 import classNames from 'classnames'
 import { Form, Formik } from 'formik'
 import Router from 'next/router'
@@ -30,12 +29,17 @@ export const Login = () => {
     const onSubmit = (values: LoginType) => {
         setIsSubmitted(true)
         try {
-            axios(`${BACKEND_URL}/Auth/login`, {
+            fetch(`${BACKEND_URL}/Auth/login`, {
                 method: 'POST',
-                data: values,
-                withCredentials: true,
+                headers: {
+                    Accept: 'application/json, text/plain, */*',
+                    'Content-Type': 'application/json;charset=utf-8',
+                },
+                body: JSON.stringify(values),
+                credentials: 'include',
+            }).then((res) => {
+                Router.push('/')
             })
-            Router.push('/')
         } catch {
             setIsError(true)
         }

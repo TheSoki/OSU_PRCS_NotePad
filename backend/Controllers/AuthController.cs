@@ -46,18 +46,4 @@ public class AuthController : ControllerBase
             return Ok();
         }
     }
-
-
-    [Route("isAuthenticated")]
-    [HttpGet]
-    public ActionResult<bool> IsAuthenticated()
-    {
-        var token = Request.Cookies["token"];
-        if (token == null)
-        {
-            return Ok(false);
-        }
-        var isValid = AuthContext.IsTokenValid(token);
-        return Ok(isValid);
-    }
 }

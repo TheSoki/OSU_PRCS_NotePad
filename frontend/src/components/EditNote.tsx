@@ -1,4 +1,3 @@
-import axios, { AxiosResponse } from 'axios'
 import classNames from 'classnames'
 import { Form, Formik } from 'formik'
 import Router from 'next/router'
@@ -10,18 +9,13 @@ import { FormikField } from './FormikField'
 import { StateFormikField } from './StateFormikField'
 
 const fetchNote = async (id: string): Promise<NoteType | null> => {
-    return await axios(`${BACKEND_URL}/Note/${id}`, {
+    return await fetch(`${BACKEND_URL}/Note/${id}`, {
         method: 'GET',
-        withCredentials: true,
+        credentials: 'include',
     })
-        .then((response: AxiosResponse<NoteType[]>) => {
-            if (response.data.length === 0) {
-                return null
-            }
-            return response.data[0]
-        })
-        .catch(() => {
-            return null
+        .then((res) => res.json())
+        .then((data) => {
+            return data as NoteType
         })
 }
 
@@ -47,10 +41,14 @@ export const EditNote: FC<{ id: string }> = ({ id }) => {
     const onSubmit = (values: NoteType) => {
         setIsSubmitted(true)
         try {
-            axios(`${BACKEND_URL}/Note`, {
+            fetch(`${BACKEND_URL}/Note`, {
                 method: 'PUT',
-                data: values,
-                withCredentials: true,
+                headers: {
+                    Accept: 'application/json, text/plain, */*',
+                    'Content-Type': 'application/json;charset=utf-8',
+                },
+                body: JSON.stringify(values),
+                credentials: 'include',
             })
             Router.push('/')
         } catch {
@@ -60,12 +58,11 @@ export const EditNote: FC<{ id: string }> = ({ id }) => {
 
     useEffect(() => {
         fetchNote(id)
-            .then(setDefaultValue)
+            .then((note) => setDefaultValue(note))
             .finally(() => {
                 setIsLoading(false)
             })
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    }, [id])
 
     if (isLoading) {
         return <div>Loading...</div>

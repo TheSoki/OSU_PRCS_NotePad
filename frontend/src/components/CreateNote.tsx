@@ -1,4 +1,3 @@
-import axios from 'axios'
 import classNames from 'classnames'
 import { Form, Formik } from 'formik'
 import { useState } from 'react'
@@ -30,10 +29,14 @@ export const CreateNote = () => {
     const onSubmit = (values: NoteType) => {
         setIsSubmitted(true)
         try {
-            axios(`${BACKEND_URL}/Note`, {
+            fetch(`${BACKEND_URL}/Note`, {
                 method: 'POST',
-                data: values,
-                withCredentials: true,
+                headers: {
+                    Accept: 'application/json, text/plain, */*',
+                    'Content-Type': 'application/json;charset=utf-8',
+                },
+                body: JSON.stringify(values),
+                credentials: 'include',
             })
             Router.push('/')
         } catch {

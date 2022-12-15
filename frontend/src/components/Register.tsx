@@ -1,4 +1,3 @@
-import axios from 'axios'
 import classNames from 'classnames'
 import { Form, Formik } from 'formik'
 import Router from 'next/router'
@@ -32,9 +31,14 @@ export const Register = () => {
     const onSubmit = (values: RegisterType) => {
         setIsSubmitted(true)
         try {
-            axios(`${BACKEND_URL}/Auth/register`, {
+            fetch(`${BACKEND_URL}/Auth/register`, {
                 method: 'POST',
-                data: values,
+                headers: {
+                    Accept: 'application/json, text/plain, */*',
+                    'Content-Type': 'application/json;charset=utf-8',
+                },
+                body: JSON.stringify(values),
+                credentials: 'include',
             })
             Router.push('/login')
         } catch {
