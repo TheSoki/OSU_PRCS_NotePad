@@ -14,16 +14,20 @@ public class NoteService
     }
 
 
-    public IEnumerable<Note> GetNotes(User user)
+    public IEnumerable<Note> GetNotes(User user, Role role)
     {
+        if (role == Role.Admin)
+        {
+            return _noteRepository.GetAllNotes();
+        }
         var notes = _noteRepository.GetNotes(user);
 
         return notes;
     }
 
-    public Note? GetNoteById(int id)
+    public Note? GetNoteById(int id, User user)
     {
-        var note = _noteRepository.GetNoteById(id);
+        var note = _noteRepository.GetNoteById(id, user);
         if (note == null)
         {
             return null;
@@ -45,9 +49,9 @@ public class NoteService
         }
     }
 
-    public bool DeleteNoteById(int id)
+    public bool DeleteNoteById(int id, User user)
     {
-        var note = _noteRepository.GetNoteById(id);
+        var note = _noteRepository.GetNoteById(id, user);
         if (note == null)
         {
             return false;
@@ -64,9 +68,9 @@ public class NoteService
         }
     }
 
-    public bool UpdateNoteById(UpdateNoteDTO noteUpdate)
+    public bool UpdateNoteById(UpdateNoteDTO noteUpdate, User user)
     {
-        var note = _noteRepository.GetNoteById(noteUpdate.Id);
+        var note = _noteRepository.GetNoteById(noteUpdate.Id, user);
         if (note == null)
         {
             return false;
@@ -77,7 +81,7 @@ public class NoteService
 
         try
         {
-            var updatedNote = _noteRepository.UpdateNote(note);
+            var updatedNote = _noteRepository.UpdateNote(note, user);
             return updatedNote;
         }
         catch

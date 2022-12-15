@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using backend;
 using backend.db.context;
 using backend.Repository;
@@ -14,7 +15,8 @@ builder.Services.AddDbContext<DataContext>(options =>
 });
 builder.Services.AddScoped<NoteRepository>();
 builder.Services.AddScoped<UserRepository>();
-
+builder.Services.AddControllers().AddJsonOptions(x =>
+    x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 var app = builder.Build();
 
 if (args.Length == 1 && args[0].ToLower() == "seed")

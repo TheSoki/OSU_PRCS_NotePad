@@ -25,9 +25,10 @@ namespace backend.Controllers
                 return Unauthorized();
             }
 
+            var role = AuthContext.GetRoleFromToken(Request);
             var userEmail = AuthContext.GetEmailFromToken(Request);
             var user = _userRepository.GetUserByEmail(userEmail);
-            var notes = _noteService.GetNotes(user);
+            var notes = _noteService.GetNotes(user,role);
 
             return Ok(notes);
         }
@@ -40,7 +41,10 @@ namespace backend.Controllers
                 return Unauthorized();
             }
 
-            var note = _noteService.GetNoteById(id);
+            var userEmail = AuthContext.GetEmailFromToken(Request);
+            var user = _userRepository.GetUserByEmail(userEmail);
+            var note = _noteService.GetNoteById(id, user);
+
             if (note == null)
             {
                 return NotFound();
@@ -77,7 +81,9 @@ namespace backend.Controllers
                 return Unauthorized();
             }
 
-            var note = _noteService.DeleteNoteById(id);
+            var userEmail = AuthContext.GetEmailFromToken(Request);
+            var user = _userRepository.GetUserByEmail(userEmail);
+            var note = _noteService.DeleteNoteById(id, user);
 
             if (!note)
             {
@@ -95,7 +101,9 @@ namespace backend.Controllers
                 return Unauthorized();
             }
 
-            var note = _noteService.UpdateNoteById(noteUpdate);
+            var userEmail = AuthContext.GetEmailFromToken(Request);
+            var user = _userRepository.GetUserByEmail(userEmail);
+            var note = _noteService.UpdateNoteById(noteUpdate, user);
 
             if (!note)
             {

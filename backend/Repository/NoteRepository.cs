@@ -30,9 +30,14 @@ namespace backend.Repository
             return _context.Note.Where(p => p.User.Id == user.Id).ToList();
         }
 
-        public Note? GetNoteById(int id)
+        public ICollection<Note> GetAllNotes()
         {
-            return _context.Note.Where(p => p.Id == id).FirstOrDefault();
+            return _context.Note.ToList();
+        }
+
+        public Note? GetNoteById(int id, User user)
+        {
+            return _context.Note.Where(p => p.Id == id && p.User.Id == user.Id).FirstOrDefault();
         }
 
         public bool DeleteNoteById(int id)
@@ -46,9 +51,9 @@ namespace backend.Repository
             return false;
         }
 
-        public bool UpdateNote(Note note)
+        public bool UpdateNote(Note note, User user)
         {
-            var entryNote = GetNoteById(note.Id);
+            var entryNote = GetNoteById(note.Id, user);
             if (entryNote != null)
             {
                 _context.Entry(entryNote).CurrentValues.SetValues(note);
