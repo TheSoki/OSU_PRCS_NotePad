@@ -6,6 +6,7 @@
     public DateTime CreationDate { get; set; }
     public DateTime? CompleteDate { get; set; }
     public StateType State { get; set; }
+    public User User { get; set; }
 }
 public enum StateType
 {

@@ -8,10 +8,12 @@ namespace backend.Controllers
     public class NoteController : Controller
     {
         private readonly NoteService _noteService;
+        private readonly UserRepository _userRepository;
 
-        public NoteController(NoteRepository noteRepository)
+        public NoteController(NoteRepository noteRepository, UserRepository userRepository)
         {
             _noteService = new NoteService(noteRepository);
+            _userRepository = userRepository;
         }
 
 
@@ -23,7 +25,8 @@ namespace backend.Controllers
                 return Unauthorized();
             }
 
-            var notes = _noteService.GetNotes();
+            var user = _userRepository.GetActiveUser(AuthContext.GetUserToken(Request));
+            var notes = _noteService.GetNotes(user);
 
             return Ok(notes);
         }
@@ -53,8 +56,8 @@ namespace backend.Controllers
                 return Unauthorized();
             }
 
-
-            var newNote = _noteService.CreateNote(noteCreate);
+            var user = _userRepository.GetActiveUser(AuthContext.GetUserToken(Request));
+            var newNote = _noteService.CreateNote(noteCreate, user);
 
             if (!newNote)
             {
@@ -109,7 +112,8 @@ namespace backend.Controllers
                 return Unauthorized();
             }
 
-            var bytes = _noteService.ExportIntoBytes();
+            var user = _userRepository.GetActiveUser(AuthContext.GetUserToken(Request));
+            var bytes = _noteService.ExportIntoBytes(user);
 
             return File(bytes, "text/txt", "Notes.txt");
         }

@@ -14,9 +14,9 @@ public class NoteService
     }
 
 
-    public IEnumerable<Note> GetNotes()
+    public IEnumerable<Note> GetNotes(User user)
     {
-        var notes = _noteRepository.GetNotes();
+        var notes = _noteRepository.GetNotes(user);
 
         return notes;
     }
@@ -32,20 +32,11 @@ public class NoteService
         return note;
     }
 
-    public bool CreateNote(NoteDTO noteCreate)
+    public bool CreateNote(NoteDTO noteCreate, User user)
     {
-        var note = new Note
-        {
-            Title = noteCreate.Title,
-            Description = noteCreate.Description,
-            CreationDate = DateTime.Now,
-            CompleteDate = null,
-            State = StateType.Planned
-        };
-
         try
         {
-            var newNote = _noteRepository.CreateNote(noteCreate);
+            var newNote = _noteRepository.CreateNote(noteCreate, user);
             return newNote;
         }
         catch
@@ -95,10 +86,10 @@ public class NoteService
         }
     }
 
-    public byte[] ExportIntoBytes()
+    public byte[] ExportIntoBytes(User user)
     {
         string[] columnNames = new string[] { "Id", "Title", "Description", "Creation Date", "Complete Date", "State" };
-        var notes = _noteRepository.GetNotes();
+        var notes = _noteRepository.GetNotes(user);
 
         //Build the txt file data as a Comma separated string.
         string txt = string.Empty;

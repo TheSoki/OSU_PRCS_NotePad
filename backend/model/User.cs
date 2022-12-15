@@ -13,4 +13,5 @@ public class User
     public string Password { get; set; } = String.Empty;
     public string Email { get; set; } = String.Empty;
     public Role Role { get; set; }
+    public ICollection<Note> Notes {get; set;}
 }

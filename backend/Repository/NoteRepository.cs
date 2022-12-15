@@ -10,23 +10,24 @@ namespace backend.Repository
             _context = context;
         }
 
-        public bool CreateNote(NoteDTO note)
+        public bool CreateNote(NoteDTO noteCreate, User user)
         {
-
-            var newNote = new Note()
+            var note = new Note
             {
-                Title = note.Title,
-                Description = note.Description,
+                Title = noteCreate.Title,
+                Description = noteCreate.Description,
                 CreationDate = DateTime.Now,
                 CompleteDate = null,
+                State = StateType.Planned,
+                User = user
             };
-            _context.Add(newNote);
+            _context.Add(note);
             return Save();
         }
 
-        public ICollection<Note> GetNotes()
+        public ICollection<Note> GetNotes(User user)
         {
-            return _context.Note.OrderBy(p => p.Id).ToList();
+            return _context.Note.Where(p => p.User.Id == user.Id).ToList();
         }
 
         public Note? GetNoteById(int id)

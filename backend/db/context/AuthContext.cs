@@ -108,6 +108,18 @@ public static class AuthContext
         return false;
     }
 
+    public static string GetUserToken(HttpRequest request)
+    {
+        if (request.Cookies.ContainsKey("token"))
+        {
+            var token = request.Cookies["token"];
+            if (token != null)
+            {
+                return token.ToString();
+            }
+        }
+        return null;
+    }
     public static string? GetEmailFromToken(HttpRequest request)
     {
         if (request.Cookies.ContainsKey("token"))
