@@ -7,6 +7,7 @@ import Zod from 'zod'
 import { toFormikValidationSchema } from 'zod-formik-adapter'
 import { BACKEND_URL } from '../utils/helpers'
 import { FormikField } from './FormikField'
+import { StateFormikField } from './StateFormikField'
 
 const fetchNote = async (id: string): Promise<NoteType | null> => {
     return await axios(`${BACKEND_URL}/Note/${id}`, {
@@ -84,7 +85,7 @@ export const EditNote: FC<{ id: string }> = ({ id }) => {
                 )}
                 enableReinitialize
             >
-                {({ isSubmitting }) => (
+                {({ isSubmitting, setFieldValue }) => (
                     <Form className="w-min mx-auto">
                         <FormikField
                             name="title"
@@ -96,11 +97,11 @@ export const EditNote: FC<{ id: string }> = ({ id }) => {
                             label="Description"
                             disabled={isSubmitted || isSubmitting}
                         />
-                        <FormikField
+                        <StateFormikField
                             name="state"
-                            type="number"
                             label="State"
                             disabled={isSubmitted || isSubmitting}
+                            onChange={(v) => setFieldValue('state', v)}
                         />
                         <div className="flex justify-center">
                             <button

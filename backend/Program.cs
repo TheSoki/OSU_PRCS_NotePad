@@ -34,7 +34,7 @@ if (args.Length == 1 && args[0].ToLower() == "seed")
                 Id = 1,
                 Username = "admin",
                 Email = "admin@admin.com",
-                Password = AuthContext.GenerateHash("heslo"),
+                Password = AuthContext.GenerateHash("password"),
                 Role = Role.Admin,
             });
             _dataContext.SaveChanges();

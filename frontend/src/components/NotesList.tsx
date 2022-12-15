@@ -38,6 +38,19 @@ const deleteNote = async (id: string): Promise<void> => {
     })
 }
 
+const processNoteState = (state: number): string => {
+    switch (state) {
+        case 0:
+            return 'To Do'
+        case 1:
+            return 'In Progress'
+        case 2:
+            return 'Done'
+        default:
+            return ''
+    }
+}
+
 export const NotesList = () => {
     const [notes, setNotes] = useState<NoteType[]>([])
     const [isLoading, setIsLoading] = useState(true)
@@ -73,13 +86,7 @@ export const NotesList = () => {
                     <li key={note.id} className="w-full md:w-1/3 p-3">
                         <div className="bg-white rounded shadow p-5 h-full">
                             <div className="flex justify-between">
-                                <p>
-                                    {note.state === 0
-                                        ? 'To Do'
-                                        : note.state === 1
-                                        ? 'In Progress'
-                                        : 'Done'}
-                                </p>
+                                <p>{processNoteState(note.state)}</p>
                                 <NoteActions
                                     onDeleteClick={() => onDeleteClick(note.id)}
                                     editHref={`/edit/${note.id}`}

@@ -6,16 +6,16 @@ type FormikFieldType = {
     name: string
     label?: string
     placeholder?: string
-    type?: HTMLInputTypeAttribute
     disabled?: boolean
+    onChange: (v: number) => void
 }
 
-export const FormikField: FC<FormikFieldType> = ({
+export const StateFormikField: FC<FormikFieldType> = ({
     name,
     placeholder,
     label,
-    type,
     disabled,
+    onChange,
 }) => (
     <Field name={name}>
         {({ field, meta }: FieldAttributes<any>) => (
@@ -28,19 +28,24 @@ export const FormikField: FC<FormikFieldType> = ({
                         {label}
                     </label>
                 )}
-                <input
-                    type={type || 'text'}
-                    placeholder={placeholder ?? ''}
+                <select
                     className={classNames(
-                        'form-control block w-full border-gray-300 focus:border-blue-600 px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:outline-none',
+                        'form-select block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 h-10 pl-2',
                         {
                             'border-red-500 focus:border-red-800':
                                 meta.touched && meta.error,
                         }
                     )}
+                    placeholder={placeholder}
                     disabled={disabled}
-                    {...field}
-                />
+                    onChange={(e) => {
+                        onChange(Number(e.target.value))
+                    }}
+                >
+                    <option value="0">To Do</option>
+                    <option value="1">In Progress</option>
+                    <option value="2">Done</option>
+                </select>
                 {meta.touched && meta.error && (
                     <div className="text-red-500 text-sm">{meta.error}</div>
                 )}

@@ -82,6 +82,10 @@ public class NoteService
         {
             note.CompleteDate = DateTime.Now;
         }
+        else
+        {
+            note.CompleteDate = null;
+        }
 
         try
         {
