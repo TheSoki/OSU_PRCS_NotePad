@@ -13,27 +13,14 @@ public class NoteService
         _noteRepository = noteRepository;
     }
 
-
-    public IEnumerable<Note> GetNotes(User user, Role role)
-    {
-        if (role == Role.Admin)
-        {
-            return _noteRepository.GetAllNotes();
-        }
-        var notes = _noteRepository.GetNotes(user);
-
-        return notes;
-    }
-
     public Note? GetNoteById(int id, User user)
     {
-        var note = _noteRepository.GetNoteById(id, user);
-        if (note == null)
+        if (user.Role == Role.Admin)
         {
-            return null;
+            return _noteRepository.GetNoteById(id);
         }
 
-        return note;
+        return _noteRepository.GetNoteById(id, user);
     }
 
     public bool CreateNote(NoteDTO noteCreate, User user)
@@ -51,7 +38,8 @@ public class NoteService
 
     public bool DeleteNoteById(int id, User user)
     {
-        var note = _noteRepository.GetNoteById(id, user);
+        var note = user.Role == Role.Admin ? _noteRepository.GetNoteById(id) : _noteRepository.GetNoteById(id, user);
+
         if (note == null)
         {
             return false;
@@ -59,7 +47,7 @@ public class NoteService
 
         try
         {
-            var deletedNote = _noteRepository.DeleteNoteById(id);
+            var deletedNote = user.Role == Role.Admin ? _noteRepository.DeleteNoteById(id) : _noteRepository.DeleteNoteById(id, user);
             return deletedNote;
         }
         catch
@@ -70,7 +58,7 @@ public class NoteService
 
     public bool UpdateNoteById(UpdateNoteDTO noteUpdate, User user)
     {
-        var note = _noteRepository.GetNoteById(noteUpdate.Id, user);
+        var note = user.Role == Role.Admin ? _noteRepository.GetNoteById(noteUpdate.Id) : _noteRepository.GetNoteById(noteUpdate.Id, user);
         if (note == null)
         {
             return false;
@@ -81,7 +69,7 @@ public class NoteService
 
         try
         {
-            var updatedNote = _noteRepository.UpdateNote(note, user);
+            var updatedNote = user.Role == Role.Admin ? _noteRepository.UpdateNote(note) : _noteRepository.UpdateNote(note, user);
             return updatedNote;
         }
         catch
@@ -93,7 +81,7 @@ public class NoteService
     public byte[] ExportIntoBytes(User user)
     {
         string[] columnNames = new string[] { "Id", "Title", "Description", "Creation Date", "Complete Date", "State" };
-        var notes = _noteRepository.GetNotes(user);
+        var notes = user.Role == Role.Admin ? _noteRepository.GetNotes() : _noteRepository.GetNotes(user);
 
         //Build the txt file data as a Comma separated string.
         string txt = string.Empty;
