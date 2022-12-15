@@ -25,7 +25,8 @@ namespace backend.Controllers
                 return Unauthorized();
             }
 
-            var user = _userRepository.GetActiveUser(AuthContext.GetUserToken(Request));
+            var userEmail = AuthContext.GetEmailFromToken(Request);
+            var user = _userRepository.GetUserByEmail(userEmail);
             var notes = _noteService.GetNotes(user);
 
             return Ok(notes);
@@ -56,7 +57,8 @@ namespace backend.Controllers
                 return Unauthorized();
             }
 
-            var user = _userRepository.GetActiveUser(AuthContext.GetUserToken(Request));
+            var userEmail = AuthContext.GetEmailFromToken(Request);
+            var user = _userRepository.GetUserByEmail(userEmail);
             var newNote = _noteService.CreateNote(noteCreate, user);
 
             if (!newNote)
@@ -112,7 +114,8 @@ namespace backend.Controllers
                 return Unauthorized();
             }
 
-            var user = _userRepository.GetActiveUser(AuthContext.GetUserToken(Request));
+            var userEmail = AuthContext.GetEmailFromToken(Request);
+            var user = _userRepository.GetUserByEmail(userEmail);
             var bytes = _noteService.ExportIntoBytes(user);
 
             return File(bytes, "text/txt", "Notes.txt");

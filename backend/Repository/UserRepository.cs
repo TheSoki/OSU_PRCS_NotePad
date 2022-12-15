@@ -30,13 +30,5 @@ namespace backend.Repository
             return saved > 0 ? true : false;
         }
 
-        public User GetActiveUser(string token)
-        {
-            var handler = new JwtSecurityTokenHandler();
-            var encodedToken = handler.ReadJwtToken(token);
-            var email = encodedToken.Claims.Where(x => x.Type == ClaimTypes.Email).First().Value;
-
-            return _context.User.Where(x => x.Email == email).First();
-        }
     }
 }
