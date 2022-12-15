@@ -8,6 +8,7 @@ type FormikFieldType = {
     placeholder?: string
     disabled?: boolean
     onChange: (v: number) => void
+    defaultValue: number
 }
 
 export const StateFormikField: FC<FormikFieldType> = ({
@@ -16,6 +17,7 @@ export const StateFormikField: FC<FormikFieldType> = ({
     label,
     disabled,
     onChange,
+    defaultValue,
 }) => (
     <Field name={name}>
         {({ field, meta }: FieldAttributes<any>) => (
@@ -41,6 +43,7 @@ export const StateFormikField: FC<FormikFieldType> = ({
                     onChange={(e) => {
                         onChange(Number(e.target.value))
                     }}
+                    defaultValue={defaultValue?.toString()}
                 >
                     <option value="0">To Do</option>
                     <option value="1">In Progress</option>

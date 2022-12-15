@@ -15,7 +15,13 @@ const fetchNote = async (id: string): Promise<NoteType | null> => {
     })
         .then((res) => res.json())
         .then((data) => {
+            if (data?.status) {
+                return null
+            }
             return data as NoteType
+        })
+        .catch(() => {
+            return null
         })
 }
 
@@ -49,26 +55,26 @@ export const EditNote: FC<{ id: string }> = ({ id }) => {
                 },
                 body: JSON.stringify(values),
                 credentials: 'include',
+            }).then(() => {
+                Router.push('/')
             })
-            Router.push('/')
         } catch {
             setIsError(true)
         }
     }
 
     useEffect(() => {
-        fetchNote(id)
-            .then((note) => setDefaultValue(note))
-            .finally(() => {
-                setIsLoading(false)
-            })
+        fetchNote(id).then((note) => {
+            setDefaultValue(note)
+            setIsLoading(false)
+        })
     }, [id])
 
     if (isLoading) {
         return <div>Loading...</div>
     }
 
-    if (!defaultValue) {
+    if (defaultValue === null) {
         return <div>Not found</div>
     }
 
@@ -99,6 +105,7 @@ export const EditNote: FC<{ id: string }> = ({ id }) => {
                             label="State"
                             disabled={isSubmitted || isSubmitting}
                             onChange={(v) => setFieldValue('state', v)}
+                            defaultValue={defaultValue.state}
                         />
                         <div className="flex justify-center">
                             <button
