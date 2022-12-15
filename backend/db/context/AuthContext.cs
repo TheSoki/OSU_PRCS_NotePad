@@ -107,18 +107,6 @@ public static class AuthContext
         return false;
     }
 
-    public static string GetUserToken(HttpRequest request)
-    {
-        if (request.Cookies.ContainsKey("token"))
-        {
-            var token = request.Cookies["token"];
-            if (token != null)
-            {
-                return token.ToString();
-            }
-        }
-        return null;
-    }
     public static string? GetEmailFromToken(HttpRequest request)
     {
         if (request.Cookies.ContainsKey("token"))
@@ -133,18 +121,4 @@ public static class AuthContext
         return null;
     }
 
-    public static Role GetRoleFromToken(HttpRequest request)
-    {
-        if (request.Cookies.ContainsKey("token"))
-        {
-            var token = request.Cookies["token"];
-
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var jwtToken = tokenHandler.ReadJwtToken(token);
-            var role = jwtToken.Claims.First(claim => claim.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role").Value;
-            return (Role)Enum.Parse(typeof(Role), role);
-        };
-
-        return Role.User;
-    }
 }

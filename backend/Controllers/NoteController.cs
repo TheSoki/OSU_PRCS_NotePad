@@ -25,10 +25,9 @@ namespace backend.Controllers
                 return Unauthorized();
             }
 
-            var role = AuthContext.GetRoleFromToken(Request);
             var userEmail = AuthContext.GetEmailFromToken(Request);
             var user = _userRepository.GetUserByEmail(userEmail);
-            var notes = _noteService.GetNotes(user,role);
+            var notes = _noteService.GetNotes(user);
 
             return Ok(notes);
         }

@@ -13,6 +13,16 @@ public class NoteService
         _noteRepository = noteRepository;
     }
 
+    public ICollection<Note> GetNotes(User user)
+    {
+        if (user.Role == Role.Admin)
+        {
+            return _noteRepository.GetNotes();
+        }
+
+        return _noteRepository.GetNotes(user);
+    }
+
     public Note? GetNoteById(int id, User user)
     {
         if (user.Role == Role.Admin)
