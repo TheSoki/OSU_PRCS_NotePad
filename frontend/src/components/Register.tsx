@@ -1,5 +1,5 @@
 import classNames from 'classnames'
-import { Form, Formik } from 'formik'
+import { Form, Formik, FormikHelpers } from 'formik'
 import Router from 'next/router'
 import { useState } from 'react'
 import Zod from 'zod'
@@ -28,7 +28,10 @@ export const Register = () => {
     const [isSubmitted, setIsSubmitted] = useState(false)
     const [isError, setIsError] = useState(false)
 
-    const onSubmit = (values: RegisterType) => {
+    const onSubmit = (
+        values: RegisterType,
+        actions: FormikHelpers<RegisterType>
+    ) => {
         setIsSubmitted(true)
         try {
             fetch(`${BACKEND_URL}/Auth/register`, {
@@ -39,11 +42,17 @@ export const Register = () => {
                 },
                 body: JSON.stringify(values),
                 credentials: 'include',
+            }).then((res) => {
+                if (res.status !== 200) {
+                    setIsError(true)
+                    return
+                }
+                Router.push('/login')
             })
-            Router.push('/login')
         } catch {
             setIsError(true)
         }
+        actions.setSubmitting(false)
     }
 
     return (
@@ -58,32 +67,32 @@ export const Register = () => {
                         <FormikField
                             name="username"
                             placeholder="Username"
-                            disabled={isSubmitted || isSubmitting}
+                            disabled={isSubmitting}
                         />
                         <FormikField
                             name="email"
                             type="email"
                             placeholder="Email"
-                            disabled={isSubmitted || isSubmitting}
+                            disabled={isSubmitting}
                         />
                         <FormikField
                             name="password"
                             type="password"
                             placeholder="Password"
-                            disabled={isSubmitted || isSubmitting}
+                            disabled={isSubmitting}
                         />
                         <button
                             className={classNames(
                                 'bg-blue-500 py-2 px-4 font-bold',
                                 {
                                     'hover:bg-blue-700 text-white border border-blue-700 rounded':
-                                        !(isSubmitted || isSubmitting),
+                                        !isSubmitting,
                                     'text-white rounded opacity-50 cursor-not-allowed':
-                                        isSubmitted || isSubmitting,
+                                        isSubmitting,
                                 }
                             )}
                             type="submit"
-                            disabled={isSubmitted || isSubmitting}
+                            disabled={isSubmitting}
                         >
                             {isSubmitting
                                 ? 'Submitting...'
@@ -91,12 +100,14 @@ export const Register = () => {
                                 ? 'Submitted'
                                 : 'Submit'}
                         </button>
+                        {isError && (
+                            <div className="text-red-500 text-md">
+                                Something went wrong
+                            </div>
+                        )}
                     </Form>
                 )}
             </Formik>
-            {isError && (
-                <div className="text-red-500 text-md">Something went wrong</div>
-            )}
         </>
     )
 }

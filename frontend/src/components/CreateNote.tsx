@@ -1,5 +1,5 @@
 import classNames from 'classnames'
-import { Form, Formik } from 'formik'
+import { Form, Formik, FormikHelpers } from 'formik'
 import { useState } from 'react'
 import { toFormikValidationSchema } from 'zod-formik-adapter'
 import { BACKEND_URL } from '../utils/helpers'
@@ -26,7 +26,7 @@ export const CreateNote = () => {
     const [isSubmitted, setIsSubmitted] = useState(false)
     const [isError, setIsError] = useState(false)
 
-    const onSubmit = (values: NoteType) => {
+    const onSubmit = (values: NoteType, actions: FormikHelpers<NoteType>) => {
         setIsSubmitted(true)
         try {
             fetch(`${BACKEND_URL}/Note`, {
@@ -37,11 +37,13 @@ export const CreateNote = () => {
                 },
                 body: JSON.stringify(values),
                 credentials: 'include',
+            }).then(() => {
+                Router.push('/')
             })
-            Router.push('/')
         } catch {
             setIsError(true)
         }
+        actions.setSubmitting(false)
     }
 
     return (

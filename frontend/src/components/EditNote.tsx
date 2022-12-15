@@ -1,5 +1,5 @@
 import classNames from 'classnames'
-import { Form, Formik } from 'formik'
+import { Form, Formik, FormikHelpers } from 'formik'
 import Router from 'next/router'
 import { FC, useEffect, useState } from 'react'
 import Zod from 'zod'
@@ -44,7 +44,7 @@ export const EditNote: FC<{ id: string }> = ({ id }) => {
     const [isSubmitted, setIsSubmitted] = useState(false)
     const [isError, setIsError] = useState(false)
 
-    const onSubmit = (values: NoteType) => {
+    const onSubmit = (values: NoteType, actions: FormikHelpers<NoteType>) => {
         setIsSubmitted(true)
         try {
             fetch(`${BACKEND_URL}/Note`, {
@@ -61,6 +61,7 @@ export const EditNote: FC<{ id: string }> = ({ id }) => {
         } catch {
             setIsError(true)
         }
+        actions.setSubmitting(false)
     }
 
     useEffect(() => {
