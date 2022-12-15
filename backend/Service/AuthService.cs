@@ -20,9 +20,11 @@ public class AuthService
             return null;
         }
 
-        var IsHashValid = AuthContext.IsHashValid(user.Password, request.Password);
-
-        if (!AuthContext.IsHashValid(user.Password, request.Password))
+        try
+        {
+            AuthContext.ValidateHashOrThrowError(user.Password, request.Password);
+        }
+        catch
         {
             return null;
         }

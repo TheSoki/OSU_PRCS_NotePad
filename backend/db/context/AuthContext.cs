@@ -24,7 +24,7 @@ public static class AuthContext
     }
 
 
-    public static bool IsHashValid(string savedPasswordHash, string password)
+    public static void ValidateHashOrThrowError(string savedPasswordHash, string password)
     {
         byte[] hashBytes = Convert.FromBase64String(savedPasswordHash);
         byte[] salt = new byte[16];
@@ -37,7 +37,6 @@ public static class AuthContext
             if (hashBytes[i + 16] != hash[i])
                 throw new UnauthorizedAccessException();
 
-        return true;
     }
 
     public static JwtSecurityToken GenerateToken(User user)
