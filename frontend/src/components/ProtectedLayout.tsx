@@ -29,11 +29,11 @@ export const ProtectedLayout = ({
             <div className="min-w-max min-h-screen flex flex-col justify-center items-center space-y-2">
                 <span>Not authenticated go to</span>
                 <span className="text-xl">
-                    <Link href="login">login</Link>
+                    <Link href="/login">login</Link>
                 </span>
                 <span>or</span>
                 <span className="text-xl">
-                    <Link href="register">register</Link>
+                    <Link href="/register">register</Link>
                 </span>
             </div>
         )
@@ -46,7 +46,7 @@ export const ProtectedLayout = ({
                     <Link className="mr-4 uppercase font-medium" href="/">
                         home
                     </Link>
-                    <Link className="mr-4 uppercase font-medium" href="create">
+                    <Link className="mr-4 uppercase font-medium" href="/create">
                         create
                     </Link>
                     <button
