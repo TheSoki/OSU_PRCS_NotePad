@@ -123,7 +123,7 @@ export const NotesList = () => {
 
     return (
         <div>
-            <button onClick={() => exportToTxt()} className="float-right">
+            <button onClick={() => exportToTxt()} className="float-right mr-5">
                 export to txt
             </button>
             <ul className="w-full flex flex-wrap">

@@ -5,11 +5,9 @@ import { Register as RegisterComponent } from '../../src/components/Register'
 const RegisterPage = () => (
     <>
         <Header />
-        <main>
-            <div className="min-h-screen flex justify-center items-center">
-                <RegisterComponent />
-            </div>
-        </main>
+        <div className="min-h-screen flex justify-center items-center">
+            <RegisterComponent />
+        </div>
     </>
 )
 

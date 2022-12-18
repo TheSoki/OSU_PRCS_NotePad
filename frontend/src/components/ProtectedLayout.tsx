@@ -1,6 +1,5 @@
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
-import { BACKEND_URL } from '../utils/helpers'
 
 export const ProtectedLayout = ({
     children,

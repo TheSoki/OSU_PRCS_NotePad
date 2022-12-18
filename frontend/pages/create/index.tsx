@@ -5,11 +5,9 @@ import { ProtectedLayout } from '../../src/components/ProtectedLayout'
 const CreateNotePage = () => (
     <>
         <Header />
-        <main>
-            <ProtectedLayout>
-                <CreateNote />
-            </ProtectedLayout>
-        </main>
+        <ProtectedLayout>
+            <CreateNote />
+        </ProtectedLayout>
     </>
 )
 

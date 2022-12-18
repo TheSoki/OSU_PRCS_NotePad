@@ -11,11 +11,9 @@ export const EditNotePage = () => {
     return (
         <>
             <Header />
-            <main>
-                <ProtectedLayout>
-                    <EditNote id={processQuery(id)} />
-                </ProtectedLayout>
-            </main>
+            <ProtectedLayout>
+                <EditNote id={processQuery(id)} />
+            </ProtectedLayout>
         </>
     )
 }

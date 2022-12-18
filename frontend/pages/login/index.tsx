@@ -4,11 +4,9 @@ import { Login as LoginComponent } from '../../src/components/Login'
 const LoginPage = () => (
     <>
         <Header />
-        <main>
-            <div className="min-h-screen flex justify-center items-center">
-                <LoginComponent />
-            </div>
-        </main>
+        <div className="min-h-screen flex justify-center items-center">
+            <LoginComponent />
+        </div>
     </>
 )
 

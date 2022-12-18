@@ -1,4 +1,4 @@
-import { FC, HTMLInputTypeAttribute } from 'react'
+import { FC } from 'react'
 import { Field, FieldAttributes } from 'formik'
 import classNames from 'classnames'
 
