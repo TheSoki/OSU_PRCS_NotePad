@@ -3,10 +3,10 @@ import { Form, Formik, FormikHelpers } from 'formik'
 import Router from 'next/router'
 import { useState } from 'react'
 import { toFormikValidationSchema } from 'zod-formik-adapter'
-import { BACKEND_URL } from '../utils/helpers'
 import { FormikField } from './FormikField'
 import { registerValidationSchema } from '../utils/validation'
 import { RegisterType } from '../utils/types'
+import { fetchRegister } from '../utils/data'
 
 export const Register = () => {
     const [isSubmitted, setIsSubmitted] = useState(false)
@@ -18,15 +18,7 @@ export const Register = () => {
     ) => {
         setIsSubmitted(true)
         try {
-            fetch(`${BACKEND_URL}/Auth/register`, {
-                method: 'POST',
-                headers: {
-                    Accept: 'application/json, text/plain, */*',
-                    'Content-Type': 'application/json;charset=utf-8',
-                },
-                body: JSON.stringify(values),
-                credentials: 'include',
-            }).then((res) => {
+            fetchRegister(values).then((res) => {
                 if (res.status !== 200) {
                     setIsError(true)
                     return

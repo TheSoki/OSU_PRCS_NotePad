@@ -1,7 +1,7 @@
 import {
     createNoteValidationSchema,
     loginValidationSchema,
-    noteValidationSchema,
+    editNoteValidationSchema,
     registerValidationSchema,
 } from './validation'
 
@@ -20,4 +20,13 @@ export type RegisterType = Zod.infer<typeof registerValidationSchema>
 
 export type CreateNoteType = Zod.infer<typeof createNoteValidationSchema>
 
-export type NoteType = Zod.infer<typeof noteValidationSchema>
+export type EditNoteType = Zod.infer<typeof editNoteValidationSchema>
+
+export type NoteType = {
+    id: string
+    title: string
+    description: string
+    creationDate: Date
+    completeDate: Date | null
+    state: number
+}

@@ -3,10 +3,10 @@ import { Form, Formik, FormikHelpers } from 'formik'
 import Router from 'next/router'
 import { useState } from 'react'
 import { toFormikValidationSchema } from 'zod-formik-adapter'
-import { BACKEND_URL } from '../utils/helpers'
 import { FormikField } from './FormikField'
 import { loginValidationSchema } from '../utils/validation'
 import { LoginType } from '../utils/types'
+import { fetchLogin } from '../utils/data'
 
 export const Login = () => {
     const [isSubmitted, setIsSubmitted] = useState(false)
@@ -15,15 +15,7 @@ export const Login = () => {
     const onSubmit = (values: LoginType, actions: FormikHelpers<LoginType>) => {
         setIsSubmitted(true)
         try {
-            fetch(`${BACKEND_URL}/Auth/login`, {
-                method: 'POST',
-                headers: {
-                    Accept: 'application/json, text/plain, */*',
-                    'Content-Type': 'application/json;charset=utf-8',
-                },
-                body: JSON.stringify(values),
-                credentials: 'include',
-            }).then((data) => {
+            fetchLogin(values).then((data) => {
                 if (data.status !== 200) {
                     setIsError(true)
                     return

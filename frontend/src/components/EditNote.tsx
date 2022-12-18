@@ -3,28 +3,11 @@ import { Form, Formik, FormikHelpers } from 'formik'
 import Router from 'next/router'
 import { FC, useEffect, useState } from 'react'
 import { toFormikValidationSchema } from 'zod-formik-adapter'
-import { BACKEND_URL } from '../utils/helpers'
 import { FormikField } from './FormikField'
 import { StateFormikField } from './StateFormikField'
-import { noteValidationSchema } from '../utils/validation'
 import { NoteType } from '../utils/types'
-
-const fetchNote = async (id: string): Promise<NoteType | null> => {
-    return await fetch(`${BACKEND_URL}/Note/${id}`, {
-        method: 'GET',
-        credentials: 'include',
-    })
-        .then((res) => res.json())
-        .then((data) => {
-            if (data?.status) {
-                return null
-            }
-            return data as NoteType
-        })
-        .catch(() => {
-            return null
-        })
-}
+import { editNoteValidationSchema } from '../utils/validation'
+import { fetchEditNote, fetchGetNote } from '../utils/data'
 
 export const EditNote: FC<{ id: string }> = ({ id }) => {
     const [defaultValue, setDefaultValue] = useState<NoteType | null>(null)
@@ -35,15 +18,7 @@ export const EditNote: FC<{ id: string }> = ({ id }) => {
     const onSubmit = (values: NoteType, actions: FormikHelpers<NoteType>) => {
         setIsSubmitted(true)
         try {
-            fetch(`${BACKEND_URL}/Note`, {
-                method: 'PUT',
-                headers: {
-                    Accept: 'application/json, text/plain, */*',
-                    'Content-Type': 'application/json;charset=utf-8',
-                },
-                body: JSON.stringify(values),
-                credentials: 'include',
-            }).then(() => {
+            fetchEditNote(values).then(() => {
                 Router.push('/')
             })
         } catch {
@@ -53,7 +28,7 @@ export const EditNote: FC<{ id: string }> = ({ id }) => {
     }
 
     useEffect(() => {
-        fetchNote(id).then((note) => {
+        fetchGetNote(id).then((note) => {
             setDefaultValue(note)
             setIsLoading(false)
         })
@@ -73,7 +48,7 @@ export const EditNote: FC<{ id: string }> = ({ id }) => {
                 onSubmit={onSubmit}
                 initialValues={defaultValue}
                 validationSchema={toFormikValidationSchema(
-                    noteValidationSchema
+                    editNoteValidationSchema
                 )}
                 enableReinitialize
             >

@@ -15,7 +15,7 @@ export const createNoteValidationSchema = Zod.object({
     description: Zod.string(),
 })
 
-export const noteValidationSchema = Zod.object({
+export const editNoteValidationSchema = Zod.object({
     title: Zod.string(),
     description: Zod.string(),
     state: Zod.number(),
