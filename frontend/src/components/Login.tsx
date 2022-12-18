@@ -2,25 +2,11 @@ import classNames from 'classnames'
 import { Form, Formik, FormikHelpers } from 'formik'
 import Router from 'next/router'
 import { useState } from 'react'
-import Zod from 'zod'
 import { toFormikValidationSchema } from 'zod-formik-adapter'
 import { BACKEND_URL } from '../utils/helpers'
 import { FormikField } from './FormikField'
-
-type LoginType = {
-    email: string
-    password: string
-}
-
-const initialValues: LoginType = {
-    email: '',
-    password: '',
-}
-
-const validationSchema = Zod.object({
-    email: Zod.string().email(),
-    password: Zod.string().min(3),
-})
+import { loginValidationSchema } from '../utils/validation'
+import { LoginType } from '../utils/types'
 
 export const Login = () => {
     const [isSubmitted, setIsSubmitted] = useState(false)
@@ -54,8 +40,13 @@ export const Login = () => {
         <>
             <Formik<LoginType>
                 onSubmit={onSubmit}
-                initialValues={initialValues}
-                validationSchema={toFormikValidationSchema(validationSchema)}
+                initialValues={{
+                    email: '',
+                    password: '',
+                }}
+                validationSchema={toFormikValidationSchema(
+                    loginValidationSchema
+                )}
             >
                 {({ isSubmitting }) => (
                     <Form>

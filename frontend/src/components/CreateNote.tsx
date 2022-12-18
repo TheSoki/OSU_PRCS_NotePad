@@ -5,28 +5,17 @@ import { toFormikValidationSchema } from 'zod-formik-adapter'
 import { BACKEND_URL } from '../utils/helpers'
 import { FormikField } from './FormikField'
 import Router from 'next/router'
-import Zod from 'zod'
-
-type NoteType = {
-    title: string
-    description: string
-}
-
-const initialValues: NoteType = {
-    title: '',
-    description: '',
-}
-
-const noteValidationSchema = Zod.object({
-    title: Zod.string(),
-    description: Zod.string(),
-})
+import { createNoteValidationSchema } from '../utils/validation'
+import { CreateNoteType } from '../utils/types'
 
 export const CreateNote = () => {
     const [isSubmitted, setIsSubmitted] = useState(false)
     const [isError, setIsError] = useState(false)
 
-    const onSubmit = (values: NoteType, actions: FormikHelpers<NoteType>) => {
+    const onSubmit = (
+        values: CreateNoteType,
+        actions: FormikHelpers<CreateNoteType>
+    ) => {
         setIsSubmitted(true)
         try {
             fetch(`${BACKEND_URL}/Note`, {
@@ -48,11 +37,14 @@ export const CreateNote = () => {
 
     return (
         <>
-            <Formik<NoteType>
+            <Formik<CreateNoteType>
                 onSubmit={onSubmit}
-                initialValues={initialValues}
+                initialValues={{
+                    title: '',
+                    description: '',
+                }}
                 validationSchema={toFormikValidationSchema(
-                    noteValidationSchema
+                    createNoteValidationSchema
                 )}
             >
                 {({ isSubmitting }) => (

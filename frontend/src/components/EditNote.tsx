@@ -2,11 +2,12 @@ import classNames from 'classnames'
 import { Form, Formik, FormikHelpers } from 'formik'
 import Router from 'next/router'
 import { FC, useEffect, useState } from 'react'
-import Zod from 'zod'
 import { toFormikValidationSchema } from 'zod-formik-adapter'
 import { BACKEND_URL } from '../utils/helpers'
 import { FormikField } from './FormikField'
 import { StateFormikField } from './StateFormikField'
+import { noteValidationSchema } from '../utils/validation'
+import { NoteType } from '../utils/types'
 
 const fetchNote = async (id: string): Promise<NoteType | null> => {
     return await fetch(`${BACKEND_URL}/Note/${id}`, {
@@ -23,19 +24,6 @@ const fetchNote = async (id: string): Promise<NoteType | null> => {
         .catch(() => {
             return null
         })
-}
-
-const noteValidationSchema = Zod.object({
-    title: Zod.string(),
-    description: Zod.string(),
-    state: Zod.number(),
-})
-
-type NoteType = {
-    id: string
-    title: string
-    description: string
-    state: number
 }
 
 export const EditNote: FC<{ id: string }> = ({ id }) => {

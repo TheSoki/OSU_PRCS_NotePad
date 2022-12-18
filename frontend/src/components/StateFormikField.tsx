@@ -1,15 +1,7 @@
 import { FC } from 'react'
 import { Field, FieldAttributes } from 'formik'
 import classNames from 'classnames'
-
-type FormikFieldType = {
-    name: string
-    label?: string
-    placeholder?: string
-    disabled?: boolean
-    onChange: (v: number) => void
-    defaultValue: number
-}
+import { FormikFieldType } from '../utils/types'
 
 export const StateFormikField: FC<FormikFieldType> = ({
     name,
@@ -20,7 +12,7 @@ export const StateFormikField: FC<FormikFieldType> = ({
     defaultValue,
 }) => (
     <Field name={name}>
-        {({ field, meta }: FieldAttributes<any>) => (
+        {({ meta }: FieldAttributes<any>) => (
             <div className="mb-3 w-max md:w-96">
                 {label && (
                     <label
