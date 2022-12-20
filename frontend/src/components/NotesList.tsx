@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { NoteActions } from './NoteActions'
 import { fetchDeleteNote, fetchExportToTxt, fetchGetNotes } from '../utils/data'
 import { NoteType } from '../utils/types'
@@ -32,6 +32,13 @@ const processNoteStateEmoji = (state: number): string => {
 export const NotesList = () => {
     const [notes, setNotes] = useState<NoteType[]>([])
     const [isLoading, setIsLoading] = useState(true)
+    const [filter, setFilter] = useState<number | null>(null)
+
+    const n = useMemo(
+        () =>
+            filter !== null ? notes.filter((n) => n.state === filter) : notes,
+        [filter, notes]
+    )
 
     const onDeleteClick = async (id: string) => {
         setIsLoading(true)
@@ -58,11 +65,29 @@ export const NotesList = () => {
 
     return (
         <div>
-            <button onClick={fetchExportToTxt} className="float-right mr-5">
-                export to txt
-            </button>
+            <div className="flex justify-between px-5">
+                <select
+                    className="form-select block w-36 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 h-10 pl-2 outline-none"
+                    placeholder="Filter"
+                    onChange={(e) => {
+                        const v = Number(e.target.value)
+                        if (v >= 0 && v <= 2) {
+                            setFilter(v)
+                        } else {
+                            setFilter(null)
+                        }
+                    }}
+                    defaultValue={'4'}
+                >
+                    <option value="0">To Do</option>
+                    <option value="1">In Progress</option>
+                    <option value="2">Done</option>
+                    <option value="4">All</option>
+                </select>
+                <button onClick={fetchExportToTxt}>export to txt</button>
+            </div>
             <ul className="w-full flex flex-wrap">
-                {notes.map((note) => (
+                {n.map((note) => (
                     <li key={note.id} className="w-full md:w-1/3 p-3">
                         <div className="bg-white rounded shadow p-5 h-full">
                             <div className="flex justify-between">
