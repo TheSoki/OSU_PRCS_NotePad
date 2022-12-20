@@ -32,9 +32,11 @@ if (args.Length == 1 && args[0].ToLower() == "seed")
             _dataContext.User.Add(new User()
             {
                 Id = 1,
-                Username = "admin",
-                Email = "admin@admin.com",
+                Name = "admin",
+                Surname = "adminovič",
                 Password = AuthContext.GenerateHash("password"),
+                Email = "admin@admin.com",
+                Gender = Gender.Male,
                 Role = Role.Admin,
             });
             _dataContext.SaveChanges();

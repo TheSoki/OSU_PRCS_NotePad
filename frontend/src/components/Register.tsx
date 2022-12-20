@@ -7,6 +7,7 @@ import { FormikField } from './FormikField'
 import { registerValidationSchema } from '../utils/validation'
 import { RegisterType } from '../utils/types'
 import { fetchRegister } from '../utils/data'
+import { GenderFormikField } from './GenderFormikField'
 
 export const Register = () => {
     const [isSubmitted, setIsSubmitted] = useState(false)
@@ -35,19 +36,33 @@ export const Register = () => {
         <Formik<RegisterType>
             onSubmit={onSubmit}
             initialValues={{
-                email: '',
+                name: '',
+                surname: '',
                 password: '',
+                email: '',
+                gender: 0,
             }}
             validationSchema={toFormikValidationSchema(
                 registerValidationSchema
             )}
         >
-            {({ isSubmitting }) => (
+            {({ isSubmitting, setFieldValue }) => (
                 <Form>
                     <FormikField
-                        name="username"
-                        placeholder="Username"
+                        name="name"
+                        placeholder="Name"
                         disabled={isSubmitting}
+                    />
+                    <FormikField
+                        name="surname"
+                        placeholder="Surname"
+                        disabled={isSubmitting}
+                    />
+                    <GenderFormikField
+                        name="gender"
+                        disabled={isSubmitted || isSubmitting}
+                        onChange={(v) => setFieldValue('gender', v)}
+                        defaultValue={0}
                     />
                     <FormikField
                         name="email"

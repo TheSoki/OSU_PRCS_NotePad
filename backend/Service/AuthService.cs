@@ -59,9 +59,11 @@ public class AuthService
         {
             var user = new User
             {
-                Username = request.Username,
-                Email = request.Email,
+                Name = request.Name,
+                Surname = request.Surname,
                 Password = AuthContext.GenerateHash(request.Password),
+                Email = request.Email,
+                Gender = request.Gender,
                 Role = Role.User
             };
             _userRepository.CreateUser(user, 2);
