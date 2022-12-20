@@ -12,6 +12,8 @@ export const Login = () => {
     const [isSubmitted, setIsSubmitted] = useState(false)
     const [isError, setIsError] = useState(false)
 
+    const [displayPassword, setDisplayPassword] = useState(false)
+
     const onSubmit = (values: LoginType, actions: FormikHelpers<LoginType>) => {
         setIsSubmitted(true)
         try {
@@ -48,12 +50,23 @@ export const Login = () => {
                             placeholder="Email"
                             disabled={isSubmitting}
                         />
-                        <FormikField
-                            name="password"
-                            type="password"
-                            placeholder="Password"
-                            disabled={isSubmitting}
-                        />
+                        <div className="relative">
+                            <FormikField
+                                name="password"
+                                type={displayPassword ? 'text' : 'password'}
+                                placeholder="Password"
+                                disabled={isSubmitting}
+                            />
+                            <button
+                                type="button"
+                                onClick={() =>
+                                    setDisplayPassword((prev) => !prev)
+                                }
+                                className="absolute right-0 top-0 mt-2 mr-3"
+                            >
+                                {displayPassword ? 'Hide' : 'Show'}
+                            </button>
+                        </div>
                         <button
                             className={classNames(
                                 'bg-blue-500 py-2 px-4 font-bold',
