@@ -66,13 +66,19 @@ public class AuthService
                 Gender = request.Gender,
                 Role = Role.User
             };
-            _userRepository.CreateUser(user, 2);
+            _userRepository.CreateUser(user);
             return true;
         }
         catch
         {
             return false;
         }
+    }
+
+    public User? GetUser(string userEmail)
+    {
+        var user = _userRepository.GetUserByEmail(userEmail);
+        return user;
     }
 }
 

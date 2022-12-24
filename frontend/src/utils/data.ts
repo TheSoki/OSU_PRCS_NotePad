@@ -1,5 +1,11 @@
 import { BACKEND_URL } from './helpers'
-import { CreateNoteType, LoginType, NoteType, RegisterType } from './types'
+import {
+    CreateNoteType,
+    LoginType,
+    NoteType,
+    RegisterType,
+    UserType,
+} from './types'
 
 export const fetchCreateNote = (note: CreateNoteType) => {
     return fetch(`${BACKEND_URL}/Note`, {
@@ -117,6 +123,56 @@ export const fetchRegister = (values: RegisterType) => {
 export const fetchLogin = (values: LoginType) => {
     return fetch(`${BACKEND_URL}/Auth/login`, {
         method: 'POST',
+        headers: {
+            Accept: 'application/json, text/plain, */*',
+            'Content-Type': 'application/json;charset=utf-8',
+        },
+        body: JSON.stringify(values),
+        credentials: 'include',
+    })
+}
+
+export const fetchMe = async (): Promise<UserType | null> => {
+    const data = await fetch(`${BACKEND_URL}/Auth`, {
+        method: 'GET',
+        credentials: 'include',
+    })
+        .then((res) => res.json())
+        .then((data) => {
+            if (data?.status) {
+                return null
+            }
+            return data
+        })
+        .catch(() => {
+            return null
+        })
+
+    return data
+}
+
+export const fetchAllUsers = async (): Promise<UserType[]> => {
+    const data = await fetch(`${BACKEND_URL}/User`, {
+        method: 'GET',
+        credentials: 'include',
+    })
+        .then((res) => res.json())
+        .then((data) => {
+            if (data?.status) {
+                return []
+            }
+            return data
+        })
+        .catch(() => {
+            return []
+        })
+
+    return data
+}
+
+export const fetchEditUser = (values: UserType) => {
+    return fetch(`${BACKEND_URL}/User`, {
+        method: 'PUT',
         headers: {
             Accept: 'application/json, text/plain, */*',
             'Content-Type': 'application/json;charset=utf-8',

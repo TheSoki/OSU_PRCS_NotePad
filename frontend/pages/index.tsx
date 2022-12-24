@@ -5,9 +5,7 @@ import { ProtectedLayout } from '../src/components/ProtectedLayout'
 const HomePage = () => (
     <>
         <Header />
-        <ProtectedLayout>
-            <NotesList />
-        </ProtectedLayout>
+        <ProtectedLayout>{() => <NotesList />}</ProtectedLayout>
     </>
 )
 

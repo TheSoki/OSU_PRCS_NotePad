@@ -1,30 +1,38 @@
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
+import { ReactNode, useEffect, useState } from 'react'
+import { fetchMe } from '../utils/data'
+import { Role, UserType } from '../utils/types'
 
 export const ProtectedLayout = ({
     children,
 }: {
-    children: React.ReactNode
+    children: (_: UserType) => ReactNode
 }) => {
-    const [isAuthenticated, setIsAuthenticated] = useState(false)
+    const [user, setUser] = useState<UserType | null>(null)
     const [isLoading, setIsLoading] = useState(true)
 
     useEffect(() => {
-        if (
-            document.cookie
-                .split(';')
-                .some((item) => item.trim().startsWith('token='))
-        ) {
-            setIsAuthenticated(true)
-        }
-        setIsLoading(false)
+        fetchMe()
+            .then((res) => {
+                if (res) {
+                    setUser(res)
+                } else {
+                    setUser(null)
+                }
+            })
+            .catch(() => {
+                setUser(null)
+            })
+            .finally(() => {
+                setIsLoading(false)
+            })
     }, [])
 
     if (isLoading) {
         return <></>
     }
 
-    if (!isAuthenticated) {
+    if (!user) {
         return (
             <div className="min-w-max min-h-screen flex flex-col justify-center items-center space-y-2">
                 <span>Not authenticated go to</span>
@@ -49,8 +57,16 @@ export const ProtectedLayout = ({
                     <Link className="mr-4 uppercase font-medium" href="/create">
                         create
                     </Link>
+                    {user.role === Role.Admin && (
+                        <Link
+                            className="mr-4 uppercase font-medium"
+                            href="/users"
+                        >
+                            users
+                        </Link>
+                    )}
                     <button
-                        className="ml-auto uppercase font-medium"
+                        className="ml-auto flex"
                         onClick={() => {
                             document.cookie =
                                 'token=; expires= Thu, 21 Aug 2014 20:00:00 UTC'
@@ -58,10 +74,13 @@ export const ProtectedLayout = ({
                         }}
                     >
                         logout
+                        <span className="ml-2 hidden md:block">
+                            ({user.email})
+                        </span>
                     </button>
                 </nav>
             </div>
-            <div className="max-w-9xl mx-auto">{children}</div>
+            <div className="max-w-9xl mx-auto">{children(user)}</div>
         </>
     )
 }

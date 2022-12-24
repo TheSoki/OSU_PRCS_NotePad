@@ -36,6 +36,8 @@ export const FormikField: FC<FormikFieldType> = ({
                         {
                             'border-red-500 focus:border-red-800':
                                 meta.touched && meta.error,
+                            'bg-gray-200 text-gray-500 cursor-not-allowed':
+                                disabled,
                         }
                     )}
                     disabled={disabled}

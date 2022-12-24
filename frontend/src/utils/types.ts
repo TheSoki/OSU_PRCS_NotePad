@@ -30,3 +30,24 @@ export type NoteType = {
     completeDate: Date | null
     state: number
 }
+
+export enum Role {
+    Admin,
+    User,
+}
+
+export enum Gender {
+    Male,
+    Female,
+    Other,
+}
+
+export type UserType = {
+    id: string
+    name: string
+    surname: string
+    password: string
+    email: string
+    role: number
+    gender: number
+}

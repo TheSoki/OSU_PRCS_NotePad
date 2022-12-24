@@ -23,7 +23,6 @@ public static class AuthContext
         return savedPasswordHash;
     }
 
-
     public static void ValidateHashOrThrowError(string savedPasswordHash, string password)
     {
         byte[] hashBytes = Convert.FromBase64String(savedPasswordHash);

@@ -10,7 +10,6 @@ import { fetchRegister } from '../utils/data'
 import { GenderFormikField } from './GenderFormikField'
 
 export const Register = () => {
-    const [isSubmitted, setIsSubmitted] = useState(false)
     const [isError, setIsError] = useState(false)
 
     const [displayPassword, setDisplayPassword] = useState(false)
@@ -19,7 +18,6 @@ export const Register = () => {
         values: RegisterType,
         actions: FormikHelpers<RegisterType>
     ) => {
-        setIsSubmitted(true)
         try {
             fetchRegister(values).then((res) => {
                 if (res.status !== 200) {
@@ -62,7 +60,7 @@ export const Register = () => {
                     />
                     <GenderFormikField
                         name="gender"
-                        disabled={isSubmitted || isSubmitting}
+                        disabled={isSubmitting}
                         onChange={(v) => setFieldValue('gender', v)}
                         defaultValue={0}
                     />
@@ -100,11 +98,7 @@ export const Register = () => {
                         type="submit"
                         disabled={isSubmitting}
                     >
-                        {isSubmitting
-                            ? 'Submitting...'
-                            : isSubmitted
-                            ? 'Submitted'
-                            : 'Submit'}
+                        {isSubmitting ? 'Submitting...' : 'Submit'}
                     </button>
                     {isError && (
                         <div className="text-red-500 text-md">

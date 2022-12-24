@@ -12,7 +12,7 @@ export const EditNotePage = () => {
         <>
             <Header />
             <ProtectedLayout>
-                <EditNote id={processQuery(id)} />
+                {() => <EditNote id={processQuery(id)} />}
             </ProtectedLayout>
         </>
     )

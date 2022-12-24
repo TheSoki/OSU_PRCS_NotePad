@@ -9,13 +9,11 @@ import { LoginType } from '../utils/types'
 import { fetchLogin } from '../utils/data'
 
 export const Login = () => {
-    const [isSubmitted, setIsSubmitted] = useState(false)
     const [isError, setIsError] = useState(false)
 
     const [displayPassword, setDisplayPassword] = useState(false)
 
     const onSubmit = (values: LoginType, actions: FormikHelpers<LoginType>) => {
-        setIsSubmitted(true)
         try {
             fetchLogin(values).then((data) => {
                 if (data.status !== 200) {
@@ -80,11 +78,7 @@ export const Login = () => {
                             type="submit"
                             disabled={isSubmitting}
                         >
-                            {isSubmitting
-                                ? 'Submitting...'
-                                : isSubmitted
-                                ? 'Submitted'
-                                : 'Submit'}
+                            {isSubmitting ? 'Submitting...' : 'Submit'}
                         </button>
                         {isError && (
                             <div className="text-red-500 text-md">
